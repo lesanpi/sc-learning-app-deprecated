@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'package:e_learning_sc/model/Content.dart';
 import 'package:e_learning_sc/model/Guide.dart';
 import 'package:e_learning_sc/model/Lesson.dart';
-
+import 'package:flutter/material.dart';
 import 'Course.dart';
 
 class App{
+
+  static const MaterialAccentColor primary_color = Colors.blueAccent;
+  static Color option_color = Color(0xFF2ed1c4);
 
   var _data;
 

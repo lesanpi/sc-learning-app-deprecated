@@ -1,3 +1,4 @@
+import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/model/Content.dart';
 import 'package:e_learning_sc/model/Course.dart';
 import 'package:e_learning_sc/model/Guide.dart';
@@ -34,10 +35,10 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
     super.initState();
 
     _controller = VideoPlayerController.network(
-      //'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
       //"https://streamable.com/5kme5g",
       //"https://drive.google.com/file/d/1pWQTqFYogustPnXigo3lOVOCHm5vqAms/view?usp=sharing"
-      "https://github.com/lesanpi/sc-elearning/blob/master/static/videos/video.mp4"
+      //"https://github.com/lesanpi/sc-elearning/blob/master/static/videos/video.mp4"
     );
 
     _controller.addListener(() {
@@ -91,7 +92,7 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
                     VideoProgressIndicator(_controller, allowScrubbing: true,
                     colors: VideoProgressColors(
                         backgroundColor: Colors.white,
-                      playedColor: Color(0xFF2ed1c4)
+                      playedColor: App.primary_color
                     ),
                       padding: EdgeInsets.only(
                         top: 10,

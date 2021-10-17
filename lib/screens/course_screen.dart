@@ -1,3 +1,4 @@
+import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/model/Content.dart';
 import 'package:e_learning_sc/model/Course.dart';
 import 'package:e_learning_sc/model/Guide.dart';
@@ -33,7 +34,7 @@ class CourseScreen extends StatelessWidget{
           Container(
               height: 100,
               decoration: const BoxDecoration(
-                  color: Color(0xFF2ed1c4),
+                  color: App.primary_color,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(0),
                       bottomRight: Radius.circular(40)

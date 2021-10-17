@@ -1,10 +1,12 @@
+import 'package:e_learning_sc/model/App.dart';
+import 'package:e_learning_sc/screens/game_menu_screen.dart';
 import 'package:e_learning_sc/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
 }
-List<Widget> myScreens = [HomeScreen(), Container()];
+List<Widget> myScreens = [HomeScreen(), GameMenuScreen()];
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -84,12 +86,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFF2ed1c4),
+        selectedItemColor: App.primary_color,
         unselectedItemColor: Color(0xFFe6e1e3),
         //backgroundColor: Color(0xFFDFFBFF),
         iconSize: 35,
         elevation: 10,
         onTap: _onItemTapped,
+      ),
+      appBar: AppBar(
+        backgroundColor: App.primary_color,
+        toolbarHeight: 0,
       ),
     );
   }

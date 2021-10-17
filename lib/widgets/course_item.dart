@@ -1,3 +1,4 @@
+import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/model/Course.dart';
 import 'package:e_learning_sc/screens/course_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class CourseItem extends StatelessWidget{
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            color: Color(0xFF2ed1c4),
+            color: App.primary_color,
             borderRadius: BorderRadius.all(Radius.circular(40))
         ),
         height: 30,

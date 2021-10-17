@@ -1,3 +1,4 @@
+import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/model/Guide.dart';
 import 'package:flutter/material.dart';
 
@@ -46,13 +47,13 @@ class GuideItem extends StatelessWidget{
             InkWell(
               child: Icon(
                 Icons.description,
-                color: Color(0xFF2ed1c4),
+                color: App.primary_color,
                 size: 35,
               ),
             ),
             Container(
               child: Text(guide.title, style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   fontSize: 15,
                   color: Colors.black87,
               ),),
@@ -91,7 +92,7 @@ class GuideItem extends StatelessWidget{
             width: height,
             height: height,
             decoration: BoxDecoration(
-                color: Color(0xFF2ed1c4),
+                color: App.primary_color,
                 borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(10)
                 )

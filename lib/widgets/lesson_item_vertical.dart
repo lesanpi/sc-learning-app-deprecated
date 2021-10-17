@@ -1,3 +1,4 @@
+import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/model/Lesson.dart';
 import 'package:flutter/material.dart';
 
@@ -44,13 +45,13 @@ class LessonItemVertical extends StatelessWidget{
             InkWell(
               child: Icon(
                 Icons.play_circle_fill,
-                color: Color(0xFF2ed1c4),
+                color: App.primary_color,
                 size: 35,
               ),
             ),
             Container(
               child: Text(lesson.title, style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
                 color: Colors.black87,
                 fontSize: 15
               ),),

@@ -52,19 +52,19 @@ class HomeScreen extends StatelessWidget{
     App myApp = App();
     
     return FutureBuilder(
+
       future: DefaultAssetBundle.of(context).loadString('assets/data.json'),
       builder: (context, snapshot){
         var data = json.decode(snapshot.data.toString());
 
-        return Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
+        return SafeArea(
+          top: true,
           child: ListView(
             children: <Widget>[
               Container(
                   height: 225,
                   decoration: const BoxDecoration(
-                      color: Color(0xFF2ed1c4),
+                      color: App.primary_color,
                       borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(0),
                           bottomLeft: Radius.circular(90)
@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget{
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        data["description"],//"Aprende sobre matematicas",
+                        "Refuerza tus conocimientos en Matematicas",//Aprende sobre matematicas",
                         style: TextStyle(
                           fontSize: 35,
                           color: Colors.white,
@@ -99,9 +99,9 @@ class HomeScreen extends StatelessWidget{
                     ],
                   )
               ),
-              CourseList(course_list: myApp.courseList(data["courses"]),),
-              LessonList(lessonList: lessonList, course: Course(title: "", description: "", mini_description: "", content_list: []),),
-              GuideList(guideList: guideList,),
+              snapshot.connectionState == ConnectionState.waiting ? Container() : CourseList(course_list: myApp.courseList(data["courses"]),),
+              snapshot.connectionState == ConnectionState.waiting ? Container() : LessonList(lessonList: lessonList, course: Course(title: "", description: "", mini_description: "", content_list: []),),
+              snapshot.connectionState == ConnectionState.waiting ? Container() : GuideList(guideList: guideList,),
 
             ],
           ),
