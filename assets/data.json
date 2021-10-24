@@ -142,5 +142,107 @@
         }
       ]
     }
+  ],
+  "quizes": [
+    {
+      "id": "5tanio",
+      "title": "5to Año",
+      "description": "Vectores, matrices, derivadas e integrales.",
+      "quizes": [
+        {
+          "title": "Escalares, vectores y matrices",
+          "id": "5tanio-1",
+          "questions": [
+            {
+              "question": "Cuanto es 2 + 2?",
+              "option_1": "4",
+              "option_2": "3",
+              "option_3": "2",
+              "option_4": "Pez",
+              "correct_option": 4
+            }
+          ]
+        },
+        {
+          "title": "Integrales",
+          "id": "5tanio-2",
+          "questions": [
+            {
+              "question": "Cuanto es 2 + 2?",
+              "option_1": "4",
+              "option_2": "3",
+              "option_3": "2",
+              "option_4": "Pez",
+              "correct_option": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4tanio",
+      "title": "4to Año",
+      "description": "Ecuaciones de segundo grado",
+      "quizes": [
+        {
+          "title": "Escalares, vectores y matrices",
+          "id": "5tanio-1",
+          "questions": [
+            {
+              "question": "Cuanto es 2 + 2?",
+              "option_1": "4",
+              "option_2": "3",
+              "option_3": "2",
+              "option_4": "Pez",
+              "correct_option": 4
+            }
+          ]
+        },
+        {
+          "title": "Integrales",
+          "id": "5tanio-2",
+          "questions": [
+            {
+              "question": "Cuanto es 2 + 2?",
+              "option_1": "4",
+              "option_2": "3",
+              "option_3": "2",
+              "option_4": "Pez",
+              "correct_option": 4
+            }
+          ]
+        },
+        {
+          "title": "Integrales",
+          "id": "5tanio-2",
+          "questions": [
+            {
+              "question": "Cuanto es 2 + 2?",
+              "option_1": "4",
+              "option_2": "3",
+              "option_3": "2",
+              "option_4": "Pez",
+              "correct_option": 4
+            }
+          ]
+        },
+        {
+          "title": "Integrales",
+          "id": "5tanio-2",
+          "questions": [
+            {
+              "question": "Cuanto es 2 + 2?",
+              "option_1": "4",
+              "option_2": "3",
+              "option_3": "2",
+              "option_4": "Pez",
+              "correct_option": 4
+            }
+          ]
+        }
+      ]
+    }
+
+
   ]
 }

@@ -1,3 +1,4 @@
+import 'package:e_learning_sc/model/App.dart';
 import 'package:flutter/material.dart';
 
 class SimpleProgressBar extends StatelessWidget{
@@ -7,7 +8,7 @@ class SimpleProgressBar extends StatelessWidget{
   double height;
   Color color;
 
-  SimpleProgressBar({this.completed = 1, this.width = 0, this.height = 10, this.color = Colors.green});
+  SimpleProgressBar({this.completed = 1, this.width = 0, this.height = 10, this.color = App.green_progress});
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +18,17 @@ class SimpleProgressBar extends StatelessWidget{
       width = screenWidth;
 
     return Container(
-        margin: EdgeInsets.symmetric(
-        vertical: 10
-    ),
+
     child: Stack(
     children: [
       Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white)
+        color: Colors.black12,
+        border: Border.symmetric(
+          horizontal: BorderSide(color: Colors.black12)
+        )
         ),
       ),
       Container(
@@ -35,7 +36,6 @@ class SimpleProgressBar extends StatelessWidget{
         width: completed > 0 ? 1 * width : 0,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
       )
       ]

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/model/CourseQuiz.dart';
 import 'package:e_learning_sc/model/Question.dart';
@@ -25,75 +27,75 @@ class GameMenuScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double headerHeight = 140;
 
-    return Center(
-      child: Column(
-        children: [
-          Container(
-              height: headerHeight,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              decoration: const BoxDecoration(
-                  color: App.primary_color,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(30)
-                  )
-              ),
-              padding: EdgeInsets.only(
-                  left: 30,
-                  right: 20
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Nuestros cursos",//"Aprende sobre matematicas",
-                    style: TextStyle(
-                      fontSize: 35,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      //fontFamily:
-                    ),
-                  ),
+    return FutureBuilder(
 
+        future: DefaultAssetBundle.of(context).loadString('assets/data.json'),
+        builder: (context, snapshot) {
+          var data = json.decode(snapshot.data.toString());
+
+          return Center(
+              child: Column(
+                children: [
+                  Container(
+                      height: headerHeight,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      decoration: const BoxDecoration(
+                          color: App.primary_color,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(30)
+                          )
+                      ),
+                      padding: EdgeInsets.only(
+                          left: 30,
+                          right: 20
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Nuestros cursos",//"Aprende sobre matematicas",
+                            style: TextStyle(
+                              fontSize: 35,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              //fontFamily:
+                            ),
+                          ),
+
+                        ],
+                      )
+                  ),
+                  Container(
+                    height: screenHeight - headerHeight - 100,
+                    child: snapshot.connectionState != ConnectionState.done ? Container()
+                        :
+                    ListView(
+                      children: courseQuizMenuItemList(App.courseQuizList(data["quizes"])),
+                      scrollDirection: Axis.vertical,
+                    ),
+                  )
                 ],
               )
-          ),
-          Container(
-            height: screenHeight - headerHeight - 100,
-            child: ListView(
-              children: courseQuizMenuItem(context),
-              scrollDirection: Axis.vertical,
-            ),
-          )
-        ],
-      )
+          );
+        }
+
+
     );
+
   }
 
-  List<Widget> courseQuizMenuItem(BuildContext context){
-    double screenWidth = MediaQuery.of(context).size.width;
+  List<Widget> courseQuizMenuItemList(List<CourseQuiz> courseQuizList){
 
-    List<Question> questions_ex = [
-      Question(question: "¿Cuanto es 2 + 2?", option_1: "1", option_2: "2", option_3: "3", option_4: "Pez", correctOption: 4)
-    ];
-    List<Quiz> quizes_ex = [
-      Quiz(name: "V", questions: questions_ex)
-    ];
-    CourseQuiz courseQuiz_ex = CourseQuiz(name: "5to Año", id: "ae1e2", description: "Vectores, derivadas e integrales",
-      quizes: quizes_ex
-    );
+    List<Widget> courseQuizItems = [];
+    courseQuizList.forEach((courseQuiz) {
+      courseQuizItems.add(CourseQuizMenuItem(courseQuiz: courseQuiz));
+    });
 
-    return [
-      CourseQuizMenuItem(courseQuiz: courseQuiz_ex,),
-      CourseQuizMenuItem(courseQuiz: courseQuiz_ex,),
-      CourseQuizMenuItem(courseQuiz: courseQuiz_ex,),
-      CourseQuizMenuItem(courseQuiz: courseQuiz_ex,),
-      CourseQuizMenuItem(courseQuiz: courseQuiz_ex,),
-
-    ];
+    return courseQuizItems;
   }
 }

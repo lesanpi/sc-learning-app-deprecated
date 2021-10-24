@@ -3,6 +3,7 @@ import 'package:e_learning_sc/model/Content.dart';
 import 'package:e_learning_sc/model/Course.dart';
 import 'package:e_learning_sc/model/Guide.dart';
 import 'package:e_learning_sc/model/Lesson.dart';
+import 'package:e_learning_sc/widgets/back_button.dart';
 import 'package:e_learning_sc/widgets/content_list.dart';
 import 'package:e_learning_sc/widgets/course_list.dart';
 import 'package:e_learning_sc/widgets/guide_list.dart';
@@ -66,6 +67,10 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
   Widget videoPlayerScreen(BuildContext context){
     return Scaffold(
       body: videoPlayerScreenUI(context),
+      appBar: AppBar(
+        backgroundColor: App.primary_color,
+        toolbarHeight: 0,
+      ),
     );
   }
 
@@ -103,7 +108,7 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
               ) : Container(
                 color: Colors.black,
                 width: screenWidth,
-                height: 300
+                height: 250
               ),
               Container(
                 width: screenWidth,
@@ -144,21 +149,10 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
           ),
         ),
         Positioned(
-          left: 10,
+          left: 20,
           top: 50,
-          child: InkWell(
-            child: Container(
-              width: 50,
-              height: 50,
-              child: Icon(Icons.arrow_back_ios), decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20))
-                )
-            ),
-            onTap: (){
-              Navigator.pop(context);
-            },
-          ),
-        ),
+          child: MyBackButton(size: 30,),
+        )
       ],
     );
   }

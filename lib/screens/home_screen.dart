@@ -49,8 +49,6 @@ class HomeScreen extends StatelessWidget{
 
   Widget homeScreen(BuildContext context){
 
-    App myApp = App();
-    
     return FutureBuilder(
 
       future: DefaultAssetBundle.of(context).loadString('assets/data.json'),
@@ -99,7 +97,7 @@ class HomeScreen extends StatelessWidget{
                     ],
                   )
               ),
-              snapshot.connectionState == ConnectionState.waiting ? Container() : CourseList(course_list: myApp.courseList(data["courses"]),),
+              snapshot.connectionState == ConnectionState.waiting ? Container() : CourseList(course_list: App.courseList(data["courses"]),),
               snapshot.connectionState == ConnectionState.waiting ? Container() : LessonList(lessonList: lessonList, course: Course(title: "", description: "", mini_description: "", content_list: []),),
               snapshot.connectionState == ConnectionState.waiting ? Container() : GuideList(guideList: guideList,),
 

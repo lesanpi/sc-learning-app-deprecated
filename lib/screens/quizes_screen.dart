@@ -1,5 +1,8 @@
 import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/model/CourseQuiz.dart';
+import 'package:e_learning_sc/widgets/back_button.dart';
+import 'package:e_learning_sc/widgets/quiz_item.dart';
+import 'package:e_learning_sc/widgets/simple_progress_bar.dart';
 import 'package:flutter/material.dart';
 
 class QuizesScreen extends StatelessWidget{
@@ -13,57 +16,64 @@ class QuizesScreen extends StatelessWidget{
 
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double radius = 30;
 
     return Scaffold(
-      body: Container(
-        height: screenHeight,
-        width: screenWidth,
-        padding: EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 30
-        ),
-        child: ListView(
+      body: SafeArea(
+        child: Stack(
           children: [
             Container(
+              height: screenHeight,
               width: screenWidth,
-              height: 150,
-              decoration: BoxDecoration(
-                color: App.primary_color,
-                  borderRadius: BorderRadius.all(Radius.circular(radius)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.4),
-                      blurRadius: 1,
-                      spreadRadius: 0.1,
-                    )
-                  ]
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 80
               ),
-              child: Column(
+              child: ListView(
+                children: listQuizesWidget(),
+              ),
+            ),
+            Container(
+              width: screenWidth,
+              height: 80,
+              child: Row(
                 children: [
-                  Container(
-                    width: screenWidth,
-                    height: 100,
-                  ),
-
-                  Container(
-                    width: screenWidth,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white60,
-                      borderRadius: BorderRadius.vertical(
-                        bottom: Radius.circular(radius)
-                      ),
+                  MyBackButton(size: 30, color: Colors.black,),
+                  Text(
+                    "Quizes",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w200,
+                        fontSize: 25
                     ),
-                  )
+                  ),
                 ],
               ),
-            )
+              padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10
+              ),
+
+            ),
           ],
         ),
+      ),
+      appBar: AppBar(
+        backgroundColor: App.primary_color,
+        toolbarHeight: 0,
       ),
     );
   }
 
+  List<Widget> listQuizesWidget(){
+
+    List<Widget> quizesWidgets = [];
+    courseQuiz.quizes.forEach((quiz) {
+      quizesWidgets.add(QuizItem(quiz: quiz,));
+    });
+
+    return quizesWidgets;
+
+  }
 
 }

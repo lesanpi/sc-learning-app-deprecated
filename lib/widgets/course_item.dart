@@ -21,7 +21,14 @@ class CourseItem extends StatelessWidget{
       child: Container(
         decoration: BoxDecoration(
             color: App.primary_color,
-            borderRadius: BorderRadius.all(Radius.circular(40))
+            borderRadius: BorderRadius.all(Radius.circular(40)),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.4),
+                blurRadius: 1,
+                spreadRadius: 0.1,
+              )
+            ]
         ),
         height: 30,
         width: screenWidth * 2 / 3,

@@ -50,7 +50,8 @@ class ProgressBarState extends State<ProgressBar>{
             height: widget.height,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                border: Border.all(color: Colors.white)
+                border: Border.all(color: Colors.white),
+              color: Color.fromRGBO(0, 0, 0, 0.1)
             ),
           ),
           FutureBuilder(

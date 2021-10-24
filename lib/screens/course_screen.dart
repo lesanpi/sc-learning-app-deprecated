@@ -24,6 +24,10 @@ class CourseScreen extends StatelessWidget{
   Widget courseScreen(BuildContext context){
     return Scaffold(
       body: courseScreenUI(context),
+      appBar: AppBar(
+        backgroundColor: App.primary_color,
+        toolbarHeight: 0,
+      ),
     );
   }
 
