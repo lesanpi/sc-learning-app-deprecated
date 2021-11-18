@@ -47,7 +47,7 @@ class GuideItem extends StatelessWidget{
             InkWell(
               child: Icon(
                 Icons.description,
-                color: App.primary_color,
+                color: App.primaryColor,
                 size: 35,
               ),
             ),
@@ -92,7 +92,7 @@ class GuideItem extends StatelessWidget{
             width: height,
             height: height,
             decoration: BoxDecoration(
-                color: App.primary_color,
+                color: App.primaryColor,
                 borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(10)
                 )

@@ -145,16 +145,32 @@
   ],
   "quizes": [
     {
-      "id": "5tanio",
+      "id": "5toanio",
       "title": "5to Año",
-      "description": "Vectores, matrices, derivadas e integrales.",
+      "description": "Vectores, matrices, derivadas e integrales. La matematica mas importante",
       "quizes": [
         {
           "title": "Escalares, vectores y matrices",
-          "id": "5tanio-1",
+          "id": "5toanio-01",
           "questions": [
             {
-              "question": "Cuanto es 2 + 2?",
+              "question": "¿Cuanto es 2 + 2?",
+              "option_1": "4",
+              "option_2": "3",
+              "option_3": "2",
+              "option_4": "Pez",
+              "correct_option": 4
+            },
+            {
+              "question": "¿Quien es mas marico?",
+              "option_1": "Ricky Martin",
+              "option_2": "Carlitos",
+              "option_3": "El que lo lee",
+              "option_4": "Pez",
+              "correct_option": 2
+            },
+            {
+              "question": "¿Cuanto es 2 + 2?",
               "option_1": "4",
               "option_2": "3",
               "option_3": "2",
@@ -165,7 +181,7 @@
         },
         {
           "title": "Integrales",
-          "id": "5tanio-2",
+          "id": "5toanio-02",
           "questions": [
             {
               "question": "Cuanto es 2 + 2?",
@@ -180,13 +196,41 @@
       ]
     },
     {
-      "id": "4tanio",
+      "id": "4toanio",
       "title": "4to Año",
       "description": "Ecuaciones de segundo grado",
       "quizes": [
         {
           "title": "Escalares, vectores y matrices",
-          "id": "5tanio-1",
+          "id": "4toanio-01",
+          "questions": [
+            {
+              "question": "¿Cuanto es 2 + 2?",
+              "option_1": "4",
+              "option_2": "3",
+              "option_3": "2",
+              "option_4": "Pez",
+              "correct_option": 4
+            }
+          ]
+        },
+        {
+          "title": "Integrales",
+          "id": "4toanio-02",
+          "questions": [
+            {
+              "question": "Cuanto es 2 + 2?",
+              "option_1": "4",
+              "option_2": "3",
+              "option_3": "2",
+              "option_4": "Pez",
+              "correct_option": 4
+            }
+          ]
+        },
+        {
+          "title": "Derivadas",
+          "id": "4toanio-03",
           "questions": [
             {
               "question": "Cuanto es 2 + 2?",
@@ -200,35 +244,7 @@
         },
         {
           "title": "Integrales",
-          "id": "5tanio-2",
-          "questions": [
-            {
-              "question": "Cuanto es 2 + 2?",
-              "option_1": "4",
-              "option_2": "3",
-              "option_3": "2",
-              "option_4": "Pez",
-              "correct_option": 4
-            }
-          ]
-        },
-        {
-          "title": "Integrales",
-          "id": "5tanio-2",
-          "questions": [
-            {
-              "question": "Cuanto es 2 + 2?",
-              "option_1": "4",
-              "option_2": "3",
-              "option_3": "2",
-              "option_4": "Pez",
-              "correct_option": 4
-            }
-          ]
-        },
-        {
-          "title": "Integrales",
-          "id": "5tanio-2",
+          "id": "4toanio-04",
           "questions": [
             {
               "question": "Cuanto es 2 + 2?",

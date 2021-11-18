@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget{
               Container(
                   height: 225,
                   decoration: const BoxDecoration(
-                      color: App.primary_color,
+                      color: App.primaryColor,
                       borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(0),
                           bottomLeft: Radius.circular(90)
@@ -98,7 +98,7 @@ class HomeScreen extends StatelessWidget{
                   )
               ),
               snapshot.connectionState == ConnectionState.waiting ? Container() : CourseList(course_list: App.courseList(data["courses"]),),
-              snapshot.connectionState == ConnectionState.waiting ? Container() : LessonList(lessonList: lessonList, course: Course(title: "", description: "", mini_description: "", content_list: []),),
+              snapshot.connectionState == ConnectionState.waiting ? Container() : LessonList(lessonList: lessonList, course: Course(title: "", description: "", miniDescription: "", contentList: []),),
               snapshot.connectionState == ConnectionState.waiting ? Container() : GuideList(guideList: guideList,),
 
             ],

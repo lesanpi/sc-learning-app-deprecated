@@ -45,7 +45,7 @@ class LessonItemVertical extends StatelessWidget{
             InkWell(
               child: Icon(
                 Icons.play_circle_fill,
-                color: App.primary_color,
+                color: App.primaryColor,
                 size: 35,
               ),
             ),

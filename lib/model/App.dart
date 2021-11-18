@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:e_learning_sc/model/Content.dart';
 import 'package:e_learning_sc/model/CourseQuiz.dart';
 import 'package:e_learning_sc/model/Guide.dart';
@@ -10,11 +9,12 @@ import 'Course.dart';
 
 class App{
 
-  static const MaterialAccentColor primary_color = Colors.blueAccent;
-  static const Color option_color = Color(0xFF2ed1c4);
+  static const MaterialAccentColor primaryColor = Colors.blueAccent;
+  static const Color optionColor = Color(0xFF2ed1c4);
   static const Color gold = Color.fromRGBO(255, 185, 44, 1);
-  static const Color dark_blue = Color(0xFF40587c);
-  static const Color green_progress = Color(0xFF98ca3f);
+  static const Color darkBlue = Color(0xFF40587c);
+  static const Color greenProgress = Color(0xFF98ca3f);
+  static const Color lightBlue = Color(0xFFdbf0fe);
 
   var _data;
 
@@ -25,8 +25,8 @@ class App{
       _courseList.add(Course(
           title: data[i]["title"], 
           description: data[i]["description"],
-          mini_description: data[i]["mini_description"],
-          content_list: contentList(data[i]["content"])
+          miniDescription: data[i]["mini_description"],
+          contentList: contentList(data[i]["content"])
       ));
     }
 

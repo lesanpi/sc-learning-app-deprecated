@@ -27,13 +27,14 @@ class ProgressBarState extends State<ProgressBar>{
     _progress = _prefs.then((SharedPreferences prefs){
       return (prefs.getInt(widget.id) ?? 0);
     });
+    print(_progress);
 
   }
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
+
     if(widget.width == 0)
       setState(() {
         widget.width = screenWidth;
@@ -57,19 +58,29 @@ class ProgressBarState extends State<ProgressBar>{
           FutureBuilder(
             future: _progress,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot){
+              print("Progress ${widget.id} ${snapshot.data} ${widget.total}");
+
 
               switch (snapshot.connectionState){
                 case ConnectionState.waiting:
                   return Container();
                 default:
-                  return Container(
-                    height: widget.height,
-                    width: widget.width * (snapshot.data == null ? 0 : snapshot.data!.toInt()) / widget.total,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Colors.white
-                    ),
-                  );
+
+                  if(snapshot.hasError){
+                    return Container();
+                  }else {
+                    double progressWidth = widget.width * (snapshot.data!.toInt()) / widget.total;
+                    if ((snapshot.data!.toInt()) > widget.total)
+                      progressWidth = widget.width;
+                    return Container(
+                      height: widget.height,
+                      width: progressWidth,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Colors.white
+                      ),
+                    );
+                  }
               }
 
 

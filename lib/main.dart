@@ -2,8 +2,15 @@ import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/screens/game_menu_screen.dart';
 import 'package:e_learning_sc/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseStorage storage = FirebaseStorage.instance;
+  String url = await storage.ref('video.mp4').getDownloadURL();
+  print('URL' + url);
   runApp(const MyApp());
 }
 List<Widget> myScreens = [HomeScreen(), GameMenuScreen()];
@@ -18,18 +25,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        '/': (context) => const MyHomePage(title: 'Main Page')
+      },
+      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -53,7 +54,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -86,15 +86,15 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: App.primary_color,
-        unselectedItemColor: Color(0xFFe6e1e3),
+        selectedItemColor: App.primaryColor,
+        unselectedItemColor: const Color(0xFFe6e1e3),
         //backgroundColor: Color(0xFFDFFBFF),
         iconSize: 35,
         elevation: 10,
         onTap: _onItemTapped,
       ),
       appBar: AppBar(
-        backgroundColor: App.primary_color,
+        backgroundColor: App.primaryColor,
         toolbarHeight: 0,
       ),
     );

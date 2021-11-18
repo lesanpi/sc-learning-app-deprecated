@@ -25,7 +25,7 @@ class CourseScreen extends StatelessWidget{
     return Scaffold(
       body: courseScreenUI(context),
       appBar: AppBar(
-        backgroundColor: App.primary_color,
+        backgroundColor: App.primaryColor,
         toolbarHeight: 0,
       ),
     );
@@ -38,7 +38,7 @@ class CourseScreen extends StatelessWidget{
           Container(
               height: 100,
               decoration: const BoxDecoration(
-                  color: App.primary_color,
+                  color: App.primaryColor,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(0),
                       bottomRight: Radius.circular(40)
@@ -96,7 +96,7 @@ class CourseScreen extends StatelessWidget{
               textAlign: TextAlign.justify,
             ),
           ),
-          ContentList(contentList: course.content_list, course: course,)
+          ContentList(contentList: course.contentList, course: course,)
         ],
       ),
     );

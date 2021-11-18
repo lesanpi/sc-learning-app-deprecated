@@ -35,6 +35,11 @@ dependencies:
   video_player: 2.2.4
   youtube_player_flutter: ^8.0.0
   shared_preferences: 2.0.8
+  firebase_core: ^1.10.0
+  firebase_storage: ^10.1.0
+  firebase_auth: ^3.2.0
+  cloud_firestore: ^3.1.0
+
 
 
 

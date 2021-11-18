@@ -20,7 +20,7 @@ class CourseItem extends StatelessWidget{
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            color: App.primary_color,
+            color: App.primaryColor,
             borderRadius: BorderRadius.all(Radius.circular(40)),
             boxShadow: [
               BoxShadow(
@@ -48,7 +48,7 @@ class CourseItem extends StatelessWidget{
               ),
             ),
             Text(
-              course.mini_description,
+              course.miniDescription,
               style: TextStyle(
                 fontSize: 15,
                 color: Colors.white,

@@ -43,7 +43,7 @@ class GameMenuScreen extends StatelessWidget {
                           .size
                           .width,
                       decoration: const BoxDecoration(
-                          color: App.primary_color,
+                          color: App.primaryColor,
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(0),
                               bottomRight: Radius.circular(30)

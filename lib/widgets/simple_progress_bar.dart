@@ -8,7 +8,7 @@ class SimpleProgressBar extends StatelessWidget{
   double height;
   Color color;
 
-  SimpleProgressBar({this.completed = 1, this.width = 0, this.height = 10, this.color = App.green_progress});
+  SimpleProgressBar({this.completed = 1, this.width = 0, this.height = 10, this.color = App.greenProgress});
 
   @override
   Widget build(BuildContext context) {

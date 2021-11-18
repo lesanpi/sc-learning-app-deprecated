@@ -12,6 +12,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class VideoPlayerScreen extends StatefulWidget{
 
@@ -31,17 +33,39 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
   late VideoPlayerController _controller;
 
 
+  Future<String> getU() async{
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    FirebaseStorage storage = FirebaseStorage.instance;
+    String url = await storage.ref('bee.mp4').getDownloadURL();
+    print('URL2 ' + url);
+    return url;
+  }
+
   @override
   void initState() {
     super.initState();
 
+    final url = getU();
+    String videoUrl = "";
+    url.then((value){
+      print("Value " + value);
+      videoUrl = value;
+      print("Value " + videoUrl);
+
+    });
+    //final ref = FirebaseStorage.instance.ref()
     _controller = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      "https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/fc-garces.mp4?alt=media&token=010573fc-1175-4a8a-85cb-0d459395f6fa"
+      //"https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/video.mp4?alt=media&token=5bfc751b-d68e-4987-8341-e84d7d11a86e"
+      //"https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/bee.mp4?alt=media&token=636d82d3-f4a4-4a4d-8a5f-f7faacf7e1a7"
+      //'https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/video.mp4?alt=media&token=5bfc751b-d68e-4987-8341-e84d7d11a86e'
+      //'https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/video.mp4?alt=media&token=5bfc751b-d68e-4987-8341-e84d7d11a86e'
+      //'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
       //"https://streamable.com/5kme5g",
       //"https://drive.google.com/file/d/1pWQTqFYogustPnXigo3lOVOCHm5vqAms/view?usp=sharing"
       //"https://github.com/lesanpi/sc-elearning/blob/master/static/videos/video.mp4"
     );
-
     _controller.addListener(() {
       setState(() {});
     });
@@ -68,7 +92,7 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
     return Scaffold(
       body: videoPlayerScreenUI(context),
       appBar: AppBar(
-        backgroundColor: App.primary_color,
+        backgroundColor: App.primaryColor,
         toolbarHeight: 0,
       ),
     );
@@ -97,7 +121,7 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
                     VideoProgressIndicator(_controller, allowScrubbing: true,
                     colors: VideoProgressColors(
                         backgroundColor: Colors.white,
-                      playedColor: App.primary_color
+                      playedColor: App.primaryColor
                     ),
                       padding: EdgeInsets.only(
                         top: 10,
@@ -144,7 +168,7 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
               ),
-              ContentList(contentList: widget.course.content_list, mini: true, course: widget.course,)
+              ContentList(contentList: widget.course.contentList, mini: true, course: widget.course,)
             ],
           ),
         ),

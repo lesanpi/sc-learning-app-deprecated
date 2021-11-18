@@ -26,13 +26,13 @@ class CourseQuizMenuItem extends StatelessWidget{
         child: Column(
             children: [
               Container(
-                height: 125,
                 width: screenWidth,
                 padding: EdgeInsets.symmetric(
-                    horizontal: 25
+                    horizontal: 25,
+                    vertical: 15
                 ),
                 decoration: BoxDecoration(
-                    color: App.primary_color,
+                    color: App.primaryColor,
                     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: Column(
@@ -54,7 +54,7 @@ class CourseQuizMenuItem extends StatelessWidget{
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    ProgressBar(total: courseQuiz.quizes.length, id: courseQuiz.id),
+                    ProgressBar(total: courseQuiz.quizes.length, id: courseQuiz.id, width: screenWidth - 60 - 40,),
 
                   ],
                 ),
@@ -64,7 +64,7 @@ class CourseQuizMenuItem extends StatelessWidget{
                 width: screenWidth,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: App.dark_blue,
+                  color: App.darkBlue,
                   borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))
                 ),
                 child: Container(

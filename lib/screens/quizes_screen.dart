@@ -59,7 +59,7 @@ class QuizesScreen extends StatelessWidget{
         ),
       ),
       appBar: AppBar(
-        backgroundColor: App.primary_color,
+        backgroundColor: App.primaryColor,
         toolbarHeight: 0,
       ),
     );
