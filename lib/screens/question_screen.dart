@@ -68,6 +68,17 @@ class QuestionScreenState extends State<QuestionScreen>{
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/logo_black.png'),
+                          fit: BoxFit.cover
+                      )
+                  ),
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                ),
+                Container(
                   width: screenWidth,
                   margin: EdgeInsets.symmetric(
                       vertical: 20
@@ -78,7 +89,7 @@ class QuestionScreenState extends State<QuestionScreen>{
                             margin: EdgeInsets.only(
                                 right: 10
                             ),
-                            child: QuizMedal(size: 60, background_color: App.primaryColor,)
+                            child: QuizMedal(size: 60, background_color: App.myGrey, emoji: "❔", emojiSize: 25,)
                         ),
                         Flexible(
                           child: Text(
@@ -155,7 +166,7 @@ class QuestionScreenState extends State<QuestionScreen>{
                       ),
                       height: 60,
                       decoration: BoxDecoration(
-                        color: option_selected == 0 ? Colors.black12 : App.primaryColor,
+                        color: option_selected == 0 ? Colors.black12 : App.myBlack,
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         boxShadow: [
                           BoxShadow(
@@ -207,7 +218,7 @@ class QuestionScreenState extends State<QuestionScreen>{
           )
       ),
       appBar: AppBar(
-        backgroundColor: App.primaryColor,
+        backgroundColor: App.myBlack,
         toolbarHeight: 0,
       ),
     ),

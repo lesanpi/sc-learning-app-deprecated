@@ -40,7 +40,7 @@ class GuideList extends StatelessWidget{
   List<Widget> listUi(List<Guide> guideList){
     List<Widget> listUiWidgets = [
       Text("Guias", style: TextStyle(
-          color: Colors.black54,
+          color: Color(0xFF333333),
           fontWeight: FontWeight.bold,
           fontSize: 20
       ),

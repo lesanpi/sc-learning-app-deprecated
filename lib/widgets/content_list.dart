@@ -38,14 +38,14 @@ class ContentList extends StatelessWidget{
       margin: EdgeInsets.only(
         left: this.mini ? 0 : 20,
         right: this.mini ? 0 : 20,
-        top: mini ? 15 : 30,
+        top: mini ? 0 : 30,
       ),
       child: mini ?
           Column(
             children: [
               Container(
                 child: Text("Lecciones", style: TextStyle(
-                  color: Colors.black54,
+                  color: Color(0xFF333333),
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -64,7 +64,7 @@ class ContentList extends StatelessWidget{
                     )
                 ),
                 width: screenWidth,
-                height: screenHeight - 400 - 40 - 10
+                height: screenHeight - 400 - 40 - 30
               )
             ],
             mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +84,7 @@ class ContentList extends StatelessWidget{
         height: 0,
       ) : Container(
         child: Text("Lecciones", style: TextStyle(
-          color: Colors.black54,
+          color: Color(0xFF333333),
           fontWeight: FontWeight.bold,
           fontSize: 20,
         ),
@@ -128,7 +128,7 @@ class ContentList extends StatelessWidget{
     contentList.forEach((content) {
       if (content is Lesson){
         height += mini ? 81 : 190;
-        contentListWidget.add(LessonItem(lesson: content as Lesson, mini: this.mini, course: course,));
+        contentListWidget.add(LessonItem(lesson: content as Lesson, mini: this.mini, course: content.course,));
       }
       else if(content is Guide){
         height += mini ? 81 : 70;

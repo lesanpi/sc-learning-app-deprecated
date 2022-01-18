@@ -34,32 +34,91 @@ class QuizesScreen extends StatelessWidget{
               ),
             ),
             Container(
-              width: screenWidth,
-              height: 80,
-              child: Row(
-                children: [
-                  MyBackButton(size: 30, color: Colors.black,),
-                  Text(
-                    "Quizes",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w200,
-                        fontSize: 25
-                    ),
+                height: 80,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  //App.primaryColor,
+                  borderRadius: BorderRadius.only(
+                    //bottomLeft: Radius.circular(30),
+                    //bottomRight: Radius.circular(30)
                   ),
-                ],
-              ),
-              padding: EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10
-              ),
-
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.2),
+                      blurRadius: 0.1,
+                      spreadRadius: 0.1,
+                    )
+                  ],
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                //: EdgeInsets.all(10),
+                child: Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                          child: Container(
+                            child: Text(
+                              "👈",
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: Color(0xFF333333),
+                                //Colors.white,
+                                fontWeight: FontWeight.bold,
+                                //fontFamily:
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            /*Icon(
+                            Icons.arrow_back_rounded, // arrow_back_ios_sharp
+                            color: App.myBlack, size: 30,
+                          ),*/
+                            margin: EdgeInsets.only(
+                                right: 0
+                            ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
+                          ),
+                          onTap: (){
+                            Navigator.pop(context);
+                          }
+                      ),
+                      Text(
+                        "Quizes",//"Aprende sobre matematicas",
+                        style: TextStyle(
+                          fontSize: 21,
+                          color: App.myBlack,
+                          //Colors.white,
+                          fontWeight: FontWeight.w900,
+                          //fontFamily:
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Container(
+                        width: 45,
+                        height: 45,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/logo_black.png'),
+                                fit: BoxFit.cover
+                            )
+                        ),
+                      ),
+                    ],
+                  ),
+                )
             ),
           ],
         ),
       ),
       appBar: AppBar(
-        backgroundColor: App.primaryColor,
+        backgroundColor: App.myBlack,
         toolbarHeight: 0,
       ),
     );

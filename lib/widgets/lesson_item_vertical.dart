@@ -43,16 +43,17 @@ class LessonItemVertical extends StatelessWidget{
         child: Row(
           children: [
             InkWell(
-              child: Icon(
+              child: Text("▶", style: TextStyle(fontSize: 25),)
+              /*Icon(
                 Icons.play_circle_fill,
-                color: App.primaryColor,
+                color: App.myBlack,
                 size: 35,
-              ),
+              ),*/
             ),
             Container(
               child: Text(lesson.title, style: TextStyle(
                 fontWeight: FontWeight.w500,
-                color: Colors.black87,
+                color: Color(0xFF333333),//Colors.black87,
                 fontSize: 15
               ),),
               margin: EdgeInsets.symmetric(
@@ -99,7 +100,11 @@ class LessonItemVertical extends StatelessWidget{
                     blurRadius: 1,
                     spreadRadius: 0.1,
                   )
-                ]
+                ],
+                image: DecorationImage(
+                    image: NetworkImage(lesson.image_url),
+                    fit: BoxFit.cover
+                )
             ),
           ),
           Container(
@@ -112,7 +117,7 @@ class LessonItemVertical extends StatelessWidget{
               children: [
                 Text(lesson.title, maxLines: 2, style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.black54,
+                    color: Color(0xFF333333),//Colors.black54,
                     fontSize: 17
                 ), overflow: TextOverflow.ellipsis,),
                 Text(lesson.description, maxLines: 4, style: TextStyle(

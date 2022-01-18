@@ -27,7 +27,7 @@ class ProgressBarState extends State<ProgressBar>{
     _progress = _prefs.then((SharedPreferences prefs){
       return (prefs.getInt(widget.id) ?? 0);
     });
-    print(_progress);
+    //print(_progress);
 
   }
 
@@ -58,7 +58,7 @@ class ProgressBarState extends State<ProgressBar>{
           FutureBuilder(
             future: _progress,
             builder: (BuildContext context, AsyncSnapshot<int> snapshot){
-              print("Progress ${widget.id} ${snapshot.data} ${widget.total}");
+              //print("Progress ${widget.id} ${snapshot.data} ${widget.total}");
 
 
               switch (snapshot.connectionState){

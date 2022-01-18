@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 class CourseQuizMenuItem extends StatelessWidget{
 
   CourseQuiz courseQuiz;
+  Color color;
+  String emoji;
 
-  CourseQuizMenuItem({required this.courseQuiz});
+  CourseQuizMenuItem({required this.courseQuiz, required this.color, required this.emoji});
 
 
 
@@ -32,33 +34,57 @@ class CourseQuizMenuItem extends StatelessWidget{
                     vertical: 15
                 ),
                 decoration: BoxDecoration(
-                    color: App.primaryColor,
+                    color: color,
                     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                child: Row(
                   children: [
-                    Text(courseQuiz.name,
-                      style: TextStyle(
+                    Container(
+                      width: (screenWidth - 50 - 60) / 3,
+                      height: 100,
+                      child: Text(
+                        emoji,
+                        style: TextStyle(
+                          fontSize: (screenWidth - 50 - 60) / 4,
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 30
+                          //fontFamily:
+                        ),
                       ),
                     ),
-                    Text(courseQuiz.description,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w300,
-                          fontSize: 15,
+                    Container(
+                      height: 150,
+                      width: 200,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    ProgressBar(total: courseQuiz.quizes.length, id: courseQuiz.id, width: screenWidth - 60 - 40,),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(courseQuiz.name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          Text(courseQuiz.description,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 15,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          ProgressBar(total: courseQuiz.quizes.length, id: courseQuiz.id, width: (screenWidth - 50 - 60 - 20) * 2 / 3,),
 
+                        ],
+                      ),
+                    ),
                   ],
-                ),
-
+                )
               ),
               Container(
                 width: screenWidth,

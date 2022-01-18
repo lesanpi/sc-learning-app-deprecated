@@ -14,7 +14,7 @@ class QuestionOption extends StatelessWidget{
     return Container(
       width: screenWidth,
       decoration: BoxDecoration(
-        color: selected ? App.primaryColor : Colors.white ,
+        color: selected ? App.myBlack : Colors.white ,
         borderRadius: BorderRadius.all(Radius.circular(20)),
         boxShadow: [
           BoxShadow(

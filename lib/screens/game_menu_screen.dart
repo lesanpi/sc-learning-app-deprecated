@@ -18,14 +18,21 @@ class GameMenuScreen extends StatelessWidget {
 
   Widget gameMenuScreen(BuildContext context){
     return Scaffold(
-      body: gameMenuScreenUI(context),
+      body: SafeArea(
+        child: gameMenuScreenUI(context),
+      ),
+      appBar: AppBar(
+        backgroundColor: App.myBlack,
+        toolbarHeight: 0,
+      ),
     );
   }
 
   Widget gameMenuScreenUI(BuildContext context){
 
     double screenHeight = MediaQuery.of(context).size.height;
-    double headerHeight = 140;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double headerHeight = 100;//120;
 
     return FutureBuilder(
 
@@ -43,35 +50,66 @@ class GameMenuScreen extends StatelessWidget {
                           .size
                           .width,
                       decoration: const BoxDecoration(
-                          color: App.primaryColor,
+                          color: Colors.white,
+                          //App.primaryColor,
                           borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(0),
-                              bottomRight: Radius.circular(30)
-                          )
-                      ),
-                      padding: EdgeInsets.only(
-                          left: 30,
-                          right: 20
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Nuestros cursos",//"Aprende sobre matematicas",
-                            style: TextStyle(
-                              fontSize: 35,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              //fontFamily:
-                            ),
+                              //bottomLeft: Radius.circular(30),
+                              //bottomRight: Radius.circular(30)
                           ),
-
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.2),
+                            blurRadius: 0.1,
+                            spreadRadius: 0.5,
+                          )
                         ],
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      //: EdgeInsets.all(10),
+                      child: Center(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "🧠",
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Color(0xFF333333),
+                                //Colors.white,
+                                fontWeight: FontWeight.bold,
+                                //fontFamily:
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "¡Ponte a Prueba!",//"Aprende sobre matematicas",
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: Color(0xFF333333),
+                                //Colors.white,
+                                fontWeight: FontWeight.w900,
+                                //fontFamily:
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "🧠",
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Color(0xFF333333),
+                                //Colors.white,
+                                fontWeight: FontWeight.bold,
+                                //fontFamily:
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       )
                   ),
                   Container(
-                    height: screenHeight - headerHeight - 100,
+                    height: screenHeight - headerHeight - 155,
                     child: snapshot.connectionState != ConnectionState.done ? Container()
                         :
                     ListView(
@@ -92,8 +130,13 @@ class GameMenuScreen extends StatelessWidget {
   List<Widget> courseQuizMenuItemList(List<CourseQuiz> courseQuizList){
 
     List<Widget> courseQuizItems = [];
+    int i = 0;
+    List<Color> colors = [App.primaryColor, App.gold, Colors.lightGreen, Colors.redAccent, Colors.indigoAccent];
+    List<String> emojis = ["🦁", "🦒", "🐊", "🦜", "🐳"];
+
     courseQuizList.forEach((courseQuiz) {
-      courseQuizItems.add(CourseQuizMenuItem(courseQuiz: courseQuiz));
+      courseQuizItems.add(CourseQuizMenuItem(courseQuiz: courseQuiz, color: colors[i], emoji: emojis[i],));
+      i++;
     });
 
     return courseQuizItems;

@@ -1,16 +1,20 @@
 import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/screens/game_menu_screen.dart';
 import 'package:e_learning_sc/screens/home_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+import 'package:cupertino_icons/cupertino_icons.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  FirebaseStorage storage = FirebaseStorage.instance;
-  String url = await storage.ref('video.mp4').getDownloadURL();
-  print('URL' + url);
+  //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
+  //SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,overlays: []);
+  //WidgetsFlutterBinding.ensureInitialized();
+  //await FlutterDownloader.initialize();
+
   runApp(const MyApp());
 }
 List<Widget> myScreens = [HomeScreen(), GameMenuScreen()];
@@ -24,9 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => const MyHomePage(title: 'Main Page')
       },
@@ -72,7 +74,45 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       body: myScreens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: 100,
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.2),
+                  blurRadius: 0.1,
+                  spreadRadius: 0.1,
+                )
+              ],
+          ),
+          child: DefaultTabController(
+            child: TabBar(
+              tabs: [
+                Tab(
+                    icon: Text("📚", style: TextStyle(fontSize: 35),)
+                  //Icon(Icons.home, size: 35.0)
+                ),
+                Tab(
+                    icon: Text("🎮", style: TextStyle(fontSize: 35),)
+                  //Icon(Icons.import_contacts, size: 35.0)
+                ),
+              ],
+              labelColor: App.myBlack,
+              //📚unselectedLabelColor: Colors.black26,
+              indicatorColor: App.myBlack,
+              onTap: _onItemTapped,
+            ),
+            length: 2,
+            initialIndex: 0,
+          )
+        ),
+      ),
+      //backgroundColor: Color(0xFFf0fdff),
+      //backgroundColor: Color(0xFFf5f5f5),
+      /*BottomNavigationBar(
         showSelectedLabels: false,   // <-- HERE
         showUnselectedLabels: false,
         items: const<BottomNavigationBarItem>[
@@ -82,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.book),
-            label: ''
+            label: '',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -92,11 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
         iconSize: 35,
         elevation: 10,
         onTap: _onItemTapped,
-      ),
-      appBar: AppBar(
-        backgroundColor: App.primaryColor,
-        toolbarHeight: 0,
-      ),
+      ),*/
+
     );
   }
 }

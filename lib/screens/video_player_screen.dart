@@ -1,24 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_learning_sc/model/App.dart';
-import 'package:e_learning_sc/model/Content.dart';
 import 'package:e_learning_sc/model/Course.dart';
-import 'package:e_learning_sc/model/Guide.dart';
 import 'package:e_learning_sc/model/Lesson.dart';
 import 'package:e_learning_sc/widgets/back_button.dart';
 import 'package:e_learning_sc/widgets/content_list.dart';
-import 'package:e_learning_sc/widgets/course_list.dart';
-import 'package:e_learning_sc/widgets/guide_list.dart';
-import 'package:e_learning_sc/widgets/lesson_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/file.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:video_player/video_player.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:chewie/chewie.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+
+
+const List<Color> _kDefaultRainbowColors = const [
+  App.gold,
+  App.primaryColor,
+  Colors.lightGreen,
+  Colors.redAccent,
+  Colors.indigoAccent
+];
 
 class VideoPlayerScreen extends StatefulWidget{
 
   Course course;
   Lesson lesson;
+  //final DocumentSnapshot document;
 
   VideoPlayerScreen({required this.course, required this.lesson});
 
@@ -31,53 +39,92 @@ class VideoPlayerScreen extends StatefulWidget{
 
 class _VideoPlayerScreen extends State<VideoPlayerScreen>{
   late VideoPlayerController _controller;
-
-
-  Future<String> getU() async{
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    FirebaseStorage storage = FirebaseStorage.instance;
-    String url = await storage.ref('bee.mp4').getDownloadURL();
-    print('URL2 ' + url);
-    return url;
-  }
+  late ChewieController _chewieController;
+  late File file;
+  bool fetchVideoFromOnline = true;
 
   @override
   void initState() {
+    initPlatformState();
     super.initState();
+    //print("URL " + widget.lesson.video_url);
 
-    final url = getU();
-    String videoUrl = "";
-    url.then((value){
-      print("Value " + value);
-      videoUrl = value;
-      print("Value " + videoUrl);
+    initializeVideoPlayer();
 
-    });
-    //final ref = FirebaseStorage.instance.ref()
-    _controller = VideoPlayerController.network(
-      "https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/fc-garces.mp4?alt=media&token=010573fc-1175-4a8a-85cb-0d459395f6fa"
-      //"https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/video.mp4?alt=media&token=5bfc751b-d68e-4987-8341-e84d7d11a86e"
-      //"https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/bee.mp4?alt=media&token=636d82d3-f4a4-4a4d-8a5f-f7faacf7e1a7"
-      //'https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/video.mp4?alt=media&token=5bfc751b-d68e-4987-8341-e84d7d11a86e'
-      //'https://firebasestorage.googleapis.com/v0/b/asociarte-e-learning-app.appspot.com/o/video.mp4?alt=media&token=5bfc751b-d68e-4987-8341-e84d7d11a86e'
-      //'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-      //"https://streamable.com/5kme5g",
-      //"https://drive.google.com/file/d/1pWQTqFYogustPnXigo3lOVOCHm5vqAms/view?usp=sharing"
-      //"https://github.com/lesanpi/sc-elearning/blob/master/static/videos/video.mp4"
-    );
+  }
+
+  Future<void> initializeVideoPlayer() async {
+    _controller = fetchVideoFromOnline ? VideoPlayerController.network(
+        widget.lesson.video_url
+    ) : VideoPlayerController.file(file);
     _controller.addListener(() {
       setState(() {});
     });
     //_controller.setLooping(true);
-    _controller.initialize();
-    _controller.play();
 
+    await Future.wait([
+      _controller.initialize()
+    ]);
+
+
+
+    _chewieController = ChewieController(
+      allowedScreenSleep: false,
+      allowFullScreen: true,
+      deviceOrientationsAfterFullScreen: [
+        DeviceOrientation.landscapeRight,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ],
+      videoPlayerController: _controller,
+      autoInitialize: true,
+      autoPlay: true,
+      showControls: true,
+    );
+    _chewieController.addListener(() {
+      if (_chewieController.isFullScreen) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeRight,
+          DeviceOrientation.landscapeLeft,
+        ]);
+      } else {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
+      }
+    });
+
+    _controller.play();
+  }
+  void initPlatformState() async {
+    print('Cache init ' + widget.lesson.video_url);
+    FileInfo? fileInfo = await DefaultCacheManager().getFileFromCache(widget.lesson.video_url);//url of video
+
+    File? _file = fileInfo?.file;
+
+    if (fileInfo == null) {
+      print('cache ln: caching now ');
+
+      setState(() {
+        fetchVideoFromOnline = true;
+      });
+
+      file = await DefaultCacheManager().getSingleFile(widget.lesson.video_url); //here we provide the url of video to cache.
+    } else {
+      print('cache ln: ${fileInfo.validTill}');
+      setState(() {
+        fetchVideoFromOnline = false;
+        file = fileInfo.file;
+      });
+    }
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _chewieController.dispose();
     super.dispose();
   }
 
@@ -92,7 +139,7 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
     return Scaffold(
       body: videoPlayerScreenUI(context),
       appBar: AppBar(
-        backgroundColor: App.primaryColor,
+        backgroundColor: App.myBlack,
         toolbarHeight: 0,
       ),
     );
@@ -110,15 +157,99 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
         Center(
           child: Column(
             children: [
+              Container(
+                  height: 80,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    //App.primaryColor,
+                    borderRadius: BorderRadius.only(
+                      //bottomLeft: Radius.circular(30),
+                      //bottomRight: Radius.circular(30)
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.2),
+                        blurRadius: 0.1,
+                        spreadRadius: 0.1,
+                      )
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  //: EdgeInsets.all(10),
+                  child: Center(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                            child: Container(
+                              child: Text(
+                                "👈",
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Color(0xFF333333),
+                                  //Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  //fontFamily:
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              /*Icon(
+                            Icons.arrow_back_rounded, // arrow_back_ios_sharp
+                            color: App.myBlack, size: 30,
+                          ),*/
+                              margin: EdgeInsets.only(
+                                  right: 0
+                              ),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(20))
+                              ),
+                            ),
+                            onTap: (){
+                              Navigator.pop(context);
+                            }
+                        ),
+                        Text(
+                          widget.course.title,//"Aprende sobre matematicas",
+                          style: TextStyle(
+                            fontSize: 21,
+                            color: App.myBlack,
+                            //Colors.white,
+                            fontWeight: FontWeight.w900,
+                            //fontFamily:
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Container(
+                          width: 45,
+                          height: 45,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage('assets/logo_black.png'),
+                                  fit: BoxFit.cover
+                              )
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+              ),
               _controller.value.isInitialized
               ? AspectRatio(
                 aspectRatio: _controller.value.aspectRatio,
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   children: <Widget>[
-                    VideoPlayer(_controller),
-                    _ControlsOverlay(controller: _controller),
-                    VideoProgressIndicator(_controller, allowScrubbing: true,
+                    //VideoPlayer(_controller),
+                    //_ControlsOverlay(controller: _controller),
+                    Chewie(
+                      controller: _chewieController,
+                    ),
+                    /*VideoProgressIndicator(_controller, allowScrubbing: true,
                     colors: VideoProgressColors(
                         backgroundColor: Colors.white,
                       playedColor: App.primaryColor
@@ -126,13 +257,32 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
                       padding: EdgeInsets.only(
                         top: 10,
                       ),
-                    ),
+                    ),*/
                   ],
                 )
               ) : Container(
-                color: Colors.black,
                 width: screenWidth,
-                height: 250
+                height: 220,
+                decoration: BoxDecoration(
+                  /*image: DecorationImage(
+                      image: NetworkImage(widget.lesson.image_url),
+                      fit: BoxFit.cover
+                  ),*/
+                  color: Colors.white10,
+
+                ),
+                child: Center(
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    child: LoadingIndicator(
+                      indicatorType: Indicator.ballGridPulse,
+                      colors: _kDefaultRainbowColors,
+                      strokeWidth: 1.0,
+                      //pathBackgroundColor: showPathBackground ? Colors.black45 : null,
+                    ),
+                  )
+                ),
               ),
               Container(
                 width: screenWidth,
@@ -172,11 +322,11 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
             ],
           ),
         ),
-        Positioned(
+        /*Positioned(
           left: 20,
-          top: 50,
+          top: 20,
           child: MyBackButton(size: 30,),
-        )
+        )*/
       ],
     );
   }

@@ -9,97 +9,144 @@ import 'package:e_learning_sc/widgets/guide_list.dart';
 import 'package:e_learning_sc/widgets/lesson_list.dart';
 import 'package:flutter/material.dart';
 
-class CourseScreen extends StatelessWidget{
-
+class CourseScreen extends StatelessWidget {
   Course course;
 
   CourseScreen({required this.course});
 
   @override
   Widget build(BuildContext context) {
-
     return courseScreen(context);
   }
 
-  Widget courseScreen(BuildContext context){
+  Widget courseScreen(BuildContext context) {
     return Scaffold(
       body: courseScreenUI(context),
       appBar: AppBar(
-        backgroundColor: App.primaryColor,
+        backgroundColor: App.myBlack,
         toolbarHeight: 0,
       ),
     );
   }
 
-  Widget courseScreenUI(BuildContext context){
-    return Center(
-      child: ListView(
-        children: [
-          Container(
-              height: 100,
-              decoration: const BoxDecoration(
-                  color: App.primaryColor,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(40)
-                  )
-              ),
-              padding: EdgeInsets.only(
-                  left: 30,
-                  right: 20
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  InkWell(
-                    child: Container(
-                      child: Icon(Icons.arrow_back_ios_sharp,
-                        color: Colors.white, size: 30,),
-                      margin: EdgeInsets.only(
-                        right: 10
+  Widget courseScreenUI(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return Column(
+      children: [
+        Container(
+          height: 80,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            //App.primaryColor,
+            borderRadius: BorderRadius.only(
+              //bottomLeft: Radius.circular(30),
+              //bottomRight: Radius.circular(30)
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.2),
+                blurRadius: 0.1,
+                spreadRadius: 0.1,
+              )
+            ],
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                  child: Container(
+                    child: Text(
+                      "👈",
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Color(0xFF333333),
+                        //Colors.white,
+                        fontWeight: FontWeight.bold,
+                        //fontFamily:
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    onTap: (){
-                      Navigator.pop(context);
-                    }
+                    /*Icon(
+                            Icons.arrow_back_rounded, // arrow_back_ios_sharp
+                            color: App.myBlack, size: 30,
+                          ),*/
+                    margin: EdgeInsets.only(right: 0),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
                   ),
-                  Text(
-                    course.title,
+                  onTap: () {
+                    Navigator.pop(context);
+                  }),
+              Text(
+                course.title, //"Aprende sobre matematicas",
+                style: TextStyle(
+                  fontSize: 21,
+                  color: App.myBlack,
+                  //Colors.white,
+                  fontWeight: FontWeight.w900,
+                  //fontFamily:
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Container(
+                width: 45,
+                height: 45,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/logo_black.png'),
+                        fit: BoxFit.cover)),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: screenHeight - 111,
+          child: ListView(
+            children: [
+              Container(
+                width: screenWidth,
+                height: 100,
+                child: Center(
+                  child: Text(
+                    course.emoji,
                     style: TextStyle(
-                      fontSize: 35,
+                      fontSize: 80,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       //fontFamily:
                     ),
                   ),
-                ],
-              )
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              left: 30,
-              right: 30,
-              top: 20,
-              bottom: 0
-            ),
-            child: Text(
-              course.description,
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 16,
-
+                ),
+                margin: EdgeInsets.symmetric(vertical: 20),
               ),
-              textAlign: TextAlign.justify,
-            ),
+              Container(
+                padding:
+                    EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 0),
+                child: Text(
+                  course.description,
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.justify,
+                ),
+              ),
+              ContentList(
+                contentList: course.contentList,
+                course: course,
+              )
+            ],
           ),
-          ContentList(contentList: course.contentList, course: course,)
-        ],
-      ),
+        )
+      ],
     );
   }
-
 }

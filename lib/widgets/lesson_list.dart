@@ -10,11 +10,10 @@ class LessonList extends StatelessWidget{
   double screenWidth = 0;
   double itemHeight = 210;
   List<Lesson> lessonList;
-  Course course;
   bool vertical;
 
 
-  LessonList({required this.course, this.lessonList = const [], this.vertical = false});
+  LessonList({this.lessonList = const [], this.vertical = false});
 
 
   @override
@@ -43,7 +42,7 @@ class LessonList extends StatelessWidget{
 
     List<Widget> listUi = [
       Text("Lecciones", style: TextStyle(
-          color: Colors.black54,
+          color: Color(0xFF333333),
           fontWeight: FontWeight.bold,
           fontSize: 20
       ),
@@ -51,7 +50,7 @@ class LessonList extends StatelessWidget{
     ];
 
     if(vertical)
-      listUi.addAll(lessonListItems(lessonList, course));
+      listUi.addAll(lessonListItems(lessonList));
     else
       listUi.add(Container(
       width: screenWidth ,
@@ -60,7 +59,7 @@ class LessonList extends StatelessWidget{
           top: 10
       ),
       child: ListView(
-        children: lessonListItems(lessonList, course),
+        children: lessonListItems(lessonList),
         scrollDirection: vertical ? Axis.vertical : Axis.horizontal,
       ),
       decoration: BoxDecoration(
@@ -71,10 +70,10 @@ class LessonList extends StatelessWidget{
     return listUi;
   }
 
-  List<Widget> lessonListItems(List<Lesson> lessonList, Course course){
+  List<Widget> lessonListItems(List<Lesson> lessonList){
     List<Widget> lessonItemList = [];
     lessonList.forEach((lesson) {
-      lessonItemList.add(LessonItem(lesson: lesson, vertical: vertical, course: course,));
+      lessonItemList.add(LessonItem(lesson: lesson, vertical: vertical, course: lesson.course,));
     });
 
     return lessonItemList;

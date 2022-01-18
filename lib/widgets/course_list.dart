@@ -1,3 +1,4 @@
+import 'package:e_learning_sc/model/App.dart';
 import 'package:e_learning_sc/model/Course.dart';
 import 'package:e_learning_sc/screens/course_screen.dart';
 import 'package:e_learning_sc/widgets/course_item.dart';
@@ -24,20 +25,20 @@ class CourseList extends StatelessWidget{
       margin: EdgeInsets.only(
           left: 20,
           right: 0,
-          top: 30,
+          top: 20,
         ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Cursos", style: TextStyle(
-              color: Colors.black54,
+              color: Color(0xFF333333),
               fontWeight: FontWeight.bold,
               fontSize: 20
           ),
           ),
           Container(
             width: screenWidth,
-            height: 125,
+            height: 200,//125,
             margin: EdgeInsets.only(
               top: 10
             ),
@@ -56,15 +57,19 @@ class CourseList extends StatelessWidget{
   
   List<Widget> courseListView(List<Course> course_list, BuildContext context){
     List<Widget> courseListItems = [];
+    int i = 0;
+    List<Color> colors = [App.primaryColor, App.gold, Colors.lightGreen, Colors.redAccent, Colors.indigoAccent];
+    List<String> emojis = ["🦁", "🦒", "🐊", "🦜", "🐳"];
     course_list.forEach((course) {
-      courseListItems.add(courseListItem(course, context));
+      courseListItems.add(courseListItem(course, colors[i], emojis[i], context));
+      i++;
     });
 
     return courseListItems;
   }
   
-  Widget courseListItem(Course course, BuildContext context){
-    return CourseItem(course: course);
+  Widget courseListItem(Course course, Color color, String emoji, BuildContext context){
+    return CourseItem(course: course, color: color, emoji: emoji,);
   }
 
 

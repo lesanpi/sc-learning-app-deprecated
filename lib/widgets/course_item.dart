@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 class CourseItem extends StatelessWidget{
 
   Course course;
+  Color color;
+  String emoji;
 
-  CourseItem({required this.course});
+  CourseItem({required this.course, this.color = App.primaryColor, this.emoji = "🦁"});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class CourseItem extends StatelessWidget{
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            color: App.primaryColor,
+            color: color,//App.primaryColor,
             borderRadius: BorderRadius.all(Radius.circular(40)),
             boxShadow: [
               BoxShadow(
@@ -38,6 +40,18 @@ class CourseItem extends StatelessWidget{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              child: Text(
+                emoji,
+                style: TextStyle(
+                  fontSize: 55,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  //fontFamily:
+                ),
+              ),
+              margin: EdgeInsets.symmetric(vertical: 0),
+            ),
             Text(
               course.title,
               style: TextStyle(
@@ -63,7 +77,7 @@ class CourseItem extends StatelessWidget{
         ),
         padding: EdgeInsets.only(
             left: 30,
-            right: 20
+            right: 30
         ),
       ),
       onTap: (){

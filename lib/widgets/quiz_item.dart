@@ -54,7 +54,7 @@ class QuizItemState extends State<QuizItem>{
               return Container(
                 width: screenWidth,
                 decoration: BoxDecoration(
-                    color: snapshot.data! > 0 ? App.gold : App.primaryColor,
+                    color: snapshot.data! > 0 ? App.gold : Colors.black12,
                     borderRadius: BorderRadius.all(Radius.circular(radius)),
                     boxShadow: [
                       BoxShadow(
@@ -75,7 +75,8 @@ class QuizItemState extends State<QuizItem>{
                       padding: EdgeInsets.symmetric(vertical: 10, horizontal:20),
                       child: Row(
                         children: [
-                          QuizMedal(size:70),
+                          QuizMedal(size:70, emoji: snapshot.data! > 0 ? "🥇":"✖‍"),
+                          // ⛔
                           Expanded(
                             child: Container(
                               child: Text(

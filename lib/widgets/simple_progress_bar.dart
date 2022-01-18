@@ -25,7 +25,7 @@ class SimpleProgressBar extends StatelessWidget{
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: Colors.black12,
+        color: Colors.white24,
         border: Border.symmetric(
           horizontal: BorderSide(color: Colors.black12)
         )

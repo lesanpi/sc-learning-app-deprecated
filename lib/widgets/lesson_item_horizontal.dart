@@ -43,6 +43,10 @@ class LessonItemHorizontal extends StatelessWidget{
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20)
+                ),
+                image: DecorationImage(
+                    image: NetworkImage(lesson.image_url),
+                    fit: BoxFit.cover
                 )
             ),
           ),

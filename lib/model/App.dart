@@ -15,19 +15,27 @@ class App{
   static const Color darkBlue = Color(0xFF40587c);
   static const Color greenProgress = Color(0xFF98ca3f);
   static const Color lightBlue = Color(0xFFdbf0fe);
+  static const Color myBlack = Color(0xFF333333);
+  static const Color myGrey = Color(0xFF444444);
 
   var _data;
 
   static List<Course> courseList(var data){
     List<Course> _courseList = [];
     for(int i = 0; i < data.length; i++){
-
-      _courseList.add(Course(
-          title: data[i]["title"], 
-          description: data[i]["description"],
-          miniDescription: data[i]["mini_description"],
-          contentList: contentList(data[i]["content"])
-      ));
+      Course _course = Course(
+        title: data[i]["title"],
+        description: data[i]["description"],
+        miniDescription: data[i]["mini_description"],
+        emoji: data[i]["emoji"],
+        contentList: contentList(data[i]["content"]),
+      );
+      
+      _courseList.add(_course);
+      
+      for (int j = 0; j < _course.contentList.length; j++){
+        _course.contentList[j].set_course(_course);
+      }
     }
 
     return _courseList;
