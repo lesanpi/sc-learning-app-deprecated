@@ -12,7 +12,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 const List<Color> _kDefaultRainbowColors = const [
   App.gold,
@@ -22,8 +22,7 @@ const List<Color> _kDefaultRainbowColors = const [
   Colors.indigoAccent
 ];
 
-class VideoPlayerScreen extends StatefulWidget{
-
+class VideoPlayerScreen extends StatefulWidget {
   Course course;
   Lesson lesson;
   //final DocumentSnapshot document;
@@ -34,73 +33,56 @@ class VideoPlayerScreen extends StatefulWidget{
   State<StatefulWidget> createState() {
     return _VideoPlayerScreen();
   }
-
 }
 
-class _VideoPlayerScreen extends State<VideoPlayerScreen>{
-  late VideoPlayerController _controller;
-  late ChewieController _chewieController;
+class _VideoPlayerScreen extends State<VideoPlayerScreen> {
+  // late VideoPlayerController _controller;
+  // late ChewieController _chewieController;
   late File file;
   bool fetchVideoFromOnline = true;
 
+  late YoutubePlayerController _controller;
+  late PlayerState _playerState;
+  late YoutubeMetaData _videoMetaData;
+  double _volume = 100;
+  bool _muted = false;
+  bool _isPlayerReady = false;
+  late int _rotation;
+
   @override
   void initState() {
-    initPlatformState();
+    _rotation = 0;
     super.initState();
-    //print("URL " + widget.lesson.video_url);
 
-    initializeVideoPlayer();
-
+    _controller = YoutubePlayerController(
+      initialVideoId: widget.lesson.video_id,
+      flags: const YoutubePlayerFlags(
+        mute: false,
+        autoPlay: true,
+        disableDragSeek: false,
+        loop: false,
+        isLive: false,
+        forceHD: false,
+        enableCaption: true,
+      ),
+    )..addListener(listener);
+    _videoMetaData = const YoutubeMetaData();
+    _playerState = PlayerState.unknown;
   }
 
-  Future<void> initializeVideoPlayer() async {
-    _controller = fetchVideoFromOnline ? VideoPlayerController.network(
-        widget.lesson.video_url
-    ) : VideoPlayerController.file(file);
-    _controller.addListener(() {
-      setState(() {});
-    });
-    //_controller.setLooping(true);
-
-    await Future.wait([
-      _controller.initialize()
-    ]);
-
-
-
-    _chewieController = ChewieController(
-      allowedScreenSleep: false,
-      allowFullScreen: true,
-      deviceOrientationsAfterFullScreen: [
-        DeviceOrientation.landscapeRight,
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ],
-      videoPlayerController: _controller,
-      autoInitialize: true,
-      autoPlay: true,
-      showControls: true,
-    );
-    _chewieController.addListener(() {
-      if (_chewieController.isFullScreen) {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.landscapeRight,
-          DeviceOrientation.landscapeLeft,
-        ]);
-      } else {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
-      }
-    });
-
-    _controller.play();
+  void listener() {
+    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
+      setState(() {
+        _playerState = _controller.value.playerState;
+        _videoMetaData = _controller.metadata;
+      });
+    }
   }
+
   void initPlatformState() async {
     print('Cache init ' + widget.lesson.video_url);
-    FileInfo? fileInfo = await DefaultCacheManager().getFileFromCache(widget.lesson.video_url);//url of video
+    FileInfo? fileInfo = await DefaultCacheManager()
+        .getFileFromCache(widget.lesson.video_url); //url of video
 
     File? _file = fileInfo?.file;
 
@@ -111,7 +93,8 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
         fetchVideoFromOnline = true;
       });
 
-      file = await DefaultCacheManager().getSingleFile(widget.lesson.video_url); //here we provide the url of video to cache.
+      file = await DefaultCacheManager().getSingleFile(
+          widget.lesson.video_url); //here we provide the url of video to cache.
     } else {
       print('cache ln: ${fileInfo.validTill}');
       setState(() {
@@ -124,192 +107,202 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
   @override
   void dispose() {
     _controller.dispose();
-    _chewieController.dispose();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     super.dispose();
   }
 
+  @override
+  void deactivate() {
+    // Pauses video while navigating to next page.
+    _controller.pause();
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return videoPlayerScreen(context);
   }
 
-  Widget videoPlayerScreen(BuildContext context){
+  Widget videoPlayerScreen(BuildContext context) {
     return Scaffold(
-      body: videoPlayerScreenUI(context),
-      appBar: AppBar(
-        backgroundColor: App.myBlack,
-        toolbarHeight: 0,
-      ),
+      body: SafeArea(child: videoPlayerScreenUI(context)),
     );
   }
 
-  Widget videoPlayerScreenUI(BuildContext context){
+  Widget videoPlayerScreenUI(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-
-    return Stack(
+    bool fullScreen = false;
+    return Column(
       children: [
-        Center(
-          child: Column(
-            children: [
-              Container(
-                  height: 80,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    //App.primaryColor,
-                    borderRadius: BorderRadius.only(
+        _rotation == 1
+            ? SizedBox.shrink()
+            : Container(
+                height: 80,
+                width: MediaQuery.of(context).size.width,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  //App.primaryColor,
+                  borderRadius: BorderRadius.only(
                       //bottomLeft: Radius.circular(30),
                       //bottomRight: Radius.circular(30)
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.2),
-                        blurRadius: 0.1,
-                        spreadRadius: 0.1,
-                      )
+                      ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.2),
+                      blurRadius: 0.1,
+                      spreadRadius: 0.1,
+                    )
+                  ],
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                //: EdgeInsets.all(10),
+                child: Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                          child: Container(
+                            child: const Text(
+                              "👈",
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: Color(0xFF333333),
+                                //Colors.white,
+                                fontWeight: FontWeight.bold,
+                                //fontFamily:
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            /*Icon(
+                      Icons.arrow_back_rounded, // arrow_back_ios_sharp
+                      color: App.myBlack, size: 30,
+                    ),*/
+                            margin: EdgeInsets.only(right: 0),
+                            decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          }),
+                      Text(
+                        widget.course.title, //"Aprende sobre matematicas",
+                        style: const TextStyle(
+                          fontSize: 21,
+                          color: App.myBlack,
+                          //Colors.white,
+                          fontWeight: FontWeight.w900,
+                          //fontFamily:
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Container(
+                        width: 45,
+                        height: 45,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/logo_black.png'),
+                                fit: BoxFit.cover)),
+                      ),
                     ],
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  //: EdgeInsets.all(10),
-                  child: Center(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                            child: Container(
-                              child: Text(
-                                "👈",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  color: Color(0xFF333333),
-                                  //Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  //fontFamily:
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              /*Icon(
-                            Icons.arrow_back_rounded, // arrow_back_ios_sharp
-                            color: App.myBlack, size: 30,
-                          ),*/
-                              margin: EdgeInsets.only(
-                                  right: 0
-                              ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(20))
-                              ),
-                            ),
-                            onTap: (){
-                              Navigator.pop(context);
-                            }
-                        ),
-                        Text(
-                          widget.course.title,//"Aprende sobre matematicas",
-                          style: TextStyle(
-                            fontSize: 21,
-                            color: App.myBlack,
-                            //Colors.white,
-                            fontWeight: FontWeight.w900,
-                            //fontFamily:
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        Container(
-                          width: 45,
-                          height: 45,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage('assets/logo_black.png'),
-                                  fit: BoxFit.cover
-                              )
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-              ),
-              _controller.value.isInitialized
-              ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: <Widget>[
-                    //VideoPlayer(_controller),
-                    //_ControlsOverlay(controller: _controller),
-                    Chewie(
-                      controller: _chewieController,
-                    ),
-                    /*VideoProgressIndicator(_controller, allowScrubbing: true,
-                    colors: VideoProgressColors(
-                        backgroundColor: Colors.white,
-                      playedColor: App.primaryColor
-                    ),
-                      padding: EdgeInsets.only(
-                        top: 10,
-                      ),
-                    ),*/
-                  ],
-                )
-              ) : Container(
+                )),
+        Expanded(
+          child: YoutubePlayerBuilder(
+            onExitFullScreen: () {
+              // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
+              SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+            },
+            player: YoutubePlayer(
+              controller: _controller,
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: Colors.blueAccent,
+              bottomActions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    _rotation == 0 ? Icons.fullscreen : Icons.fullscreen_exit,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    _controller.pause();
+                    if (_rotation == 0) {
+                      setState(() {
+                        SystemChrome.setEnabledSystemUIMode(
+                            SystemUiMode.immersive);
+                        SystemChrome.setSystemUIOverlayStyle(
+                            const SystemUiOverlayStyle(
+                          statusBarColor: Colors.white,
+                          systemNavigationBarColor: Colors.transparent,
+                          systemNavigationBarIconBrightness: Brightness.dark,
+                          statusBarBrightness: Brightness.light,
+                          statusBarIconBrightness: Brightness.dark,
+                        ));
+                        _rotation = 1;
+                      });
+                    } else {
+                      setState(() {
+                        SystemChrome.setEnabledSystemUIMode(
+                            SystemUiMode.edgeToEdge);
+                        _rotation = 0;
+                      });
+                    }
+                  },
+                ),
+                RemainingDuration(),
+                ProgressBar(isExpanded: true),
+                CurrentPosition(),
+              ],
+              onReady: () {
+                _isPlayerReady = true;
+              },
+              onEnded: (data) {
+                // _controller.load(
+                //     _ids[(_ids.indexOf(data.videoId) + 1) % _ids.length]);
+                // _showSnackBar('Next Video Started!');
+              },
+            ),
+            builder: (context, player) {
+              return Expanded(
+                child: Container(
+                  width: screenWidth,
+                  child: RotatedBox(
+                    quarterTurns: _rotation,
+                    child: player,
+                  ),
+                ),
+              );
+              // ;
+            },
+          ),
+        ),
+        _rotation == 1
+            ? SizedBox.shrink()
+            : Container(
                 width: screenWidth,
-                height: 220,
-                decoration: BoxDecoration(
-                  /*image: DecorationImage(
-                      image: NetworkImage(widget.lesson.image_url),
-                      fit: BoxFit.cover
-                  ),*/
-                  color: Colors.white10,
-
-                ),
-                child: Center(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    child: LoadingIndicator(
-                      indicatorType: Indicator.ballGridPulse,
-                      colors: _kDefaultRainbowColors,
-                      strokeWidth: 1.0,
-                      //pathBackgroundColor: showPathBackground ? Colors.black45 : null,
-                    ),
-                  )
-                ),
-              ),
-              Container(
-                width: screenWidth,
-                padding: EdgeInsets.symmetric(
-                    horizontal: 20
-                ),
-                margin: EdgeInsets.only(
-                    top: 10
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                margin: EdgeInsets.only(top: 10),
                 child: Column(
                   children: [
                     Text(
                       widget.lesson.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 20,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
-                    Container(
+                    SizedBox(
                       child: Text(
                         widget.lesson.description,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.black87,
                             fontSize: 14,
-                            fontWeight: FontWeight.w300
-                        ),
+                            fontWeight: FontWeight.w300),
                         maxLines: 3,
                       ),
                       height: 55,
@@ -318,93 +311,14 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
               ),
-              ContentList(contentList: widget.course.contentList, mini: true, course: widget.course,)
-            ],
-          ),
-        ),
-        /*Positioned(
-          left: 20,
-          top: 20,
-          child: MyBackButton(size: 30,),
-        )*/
-      ],
-    );
-  }
-
-}
-
-
-class _ControlsOverlay extends StatelessWidget {
-  const _ControlsOverlay({Key? key, required this.controller})
-      : super(key: key);
-
-  static const _examplePlaybackRates = [
-    0.25,
-    0.5,
-    1.0,
-    1.5,
-    2.0,
-    3.0,
-    5.0,
-    10.0,
-  ];
-
-  final VideoPlayerController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        AnimatedSwitcher(
-          duration: Duration(milliseconds: 50),
-          reverseDuration: Duration(milliseconds: 200),
-          child: controller.value.isPlaying
-              ? SizedBox.shrink()
-              : Container(
-            color: Colors.black26,
-            child: Center(
-              child: Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 100.0,
-              ),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            controller.value.isPlaying ? controller.pause() : controller.play();
-          },
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: PopupMenuButton<double>(
-            initialValue: controller.value.playbackSpeed,
-            tooltip: 'Playback speed',
-            onSelected: (speed) {
-              controller.setPlaybackSpeed(speed);
-            },
-            itemBuilder: (context) {
-              return [
-                for (final speed in _examplePlaybackRates)
-                  PopupMenuItem(
-                    value: speed,
-                    child: Text('${speed}x'),
-                  )
-              ];
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                // Using less vertical padding as the text is also longer
-                // horizontally, so it feels like it would need more spacing
-                // horizontally (matching the aspect ratio of the video).
-                vertical: 12,
-                horizontal: 16,
-              ),
-              child: Text('${controller.value.playbackSpeed}x'),
-            ),
-          ),
-        ),
+        _rotation == 1
+            ? SizedBox.shrink()
+            : ContentList(
+                contentList: widget.course.contentList,
+                mini: true,
+                course: widget.course,
+                currentContentId: widget.lesson.id,
+              )
       ],
     );
   }

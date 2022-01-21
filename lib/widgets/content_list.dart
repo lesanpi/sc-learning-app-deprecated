@@ -8,31 +8,27 @@ import 'package:e_learning_sc/widgets/lesson_item_horizontal.dart';
 import 'package:e_learning_sc/widgets/lesson_item_vertical.dart';
 import 'package:flutter/material.dart';
 
-class ContentList extends StatelessWidget{
-
+class ContentList extends StatelessWidget {
   double screenWidth = 0;
   double itemHeight = 0;
   bool mini;
   List<Content> contentList;
   Course course;
+  String currentContentId;
 
-  ContentList({required this.course, this.contentList = const [], this.mini = false});
-
+  ContentList(
+      {required this.course,
+      this.contentList = const [],
+      this.mini = false,
+      this.currentContentId = ""});
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double screenWidth = MediaQuery.of(context).size.width;
     this.screenWidth = screenWidth;
 
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double screenHeight = MediaQuery.of(context).size.height;
     this.screenWidth = screenHeight;
-
 
     return Container(
       margin: EdgeInsets.only(
@@ -40,60 +36,58 @@ class ContentList extends StatelessWidget{
         right: this.mini ? 0 : 20,
         top: mini ? 0 : 30,
       ),
-      child: mini ?
-          Column(
-            children: [
-              Container(
-                child: Text("Lecciones", style: TextStyle(
-                  color: Color(0xFF333333),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+      child: mini
+          ? Column(
+              children: [
+                Container(
+                  child: Text(
+                    "Lecciones",
+                    style: TextStyle(
+                      color: Color(0xFF333333),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  margin: EdgeInsets.only(left: this.mini ? 20 : 0, bottom: 10),
+                  width: screenWidth,
                 ),
-                ),
-                margin: EdgeInsets.only(
-                    left: this.mini ? 20 : 0,
-                  bottom: 10
-                ),
-                width: screenWidth,
-              ),
-              Container(
-                child: MediaQuery.removePadding(context: context,
-                    removeTop: true,
-                    child: ListView(
-                      children: listUi(contentList),
-                    )
-                ),
-                width: screenWidth,
-                height: screenHeight - 400 - 40 - 30
-              )
-            ],
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-          )
+                Container(
+                    child: MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListView(
+                          children: listUi(contentList),
+                        )),
+                    width: screenWidth,
+                    height: screenHeight - 400 - 40 - 30)
+              ],
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+            )
           : Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: listUi(contentList)
-      ),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: listUi(contentList)),
     );
   }
 
-  List<Widget> listUi(List<Content> contentList){
-
+  List<Widget> listUi(List<Content> contentList) {
     List<Widget> listUi = [
-      mini ? Container(
-        height: 0,
-      ) : Container(
-        child: Text("Lecciones", style: TextStyle(
-          color: Color(0xFF333333),
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        ),
-        margin: EdgeInsets.only(
-          left: this.mini ? 20 : 0
-        ),
-        width: screenWidth,
-      )
+      mini
+          ? Container(
+              height: 0,
+            )
+          : Container(
+              child: Text(
+                "Lecciones",
+                style: TextStyle(
+                  color: Color(0xFF333333),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              margin: EdgeInsets.only(left: this.mini ? 20 : 0),
+              width: screenWidth,
+            )
     ];
     double height = 0;
     List<Widget> contentItems = [];
@@ -103,17 +97,15 @@ class ContentList extends StatelessWidget{
     contentItems = items[1];
 
     listUi.add(Container(
-      width: screenWidth ,
+      width: screenWidth,
       height: height,
-      margin: EdgeInsets.only(
-          top: mini ? 0 : 10
-      ),
+      margin: EdgeInsets.only(top: mini ? 0 : 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: contentItems,
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
     ));
@@ -121,23 +113,30 @@ class ContentList extends StatelessWidget{
     return listUi;
   }
 
-  List contentListItems(List<Content> contentList){
-
+  List contentListItems(List<Content> contentList) {
     double height = 0;
     List<Widget> contentListWidget = [];
+
     contentList.forEach((content) {
-      if (content is Lesson){
+      if (content is Lesson) {
         height += mini ? 81 : 190;
-        contentListWidget.add(LessonItem(lesson: content as Lesson, mini: this.mini, course: content.course,));
-      }
-      else if(content is Guide){
+        final lesson = content as Lesson;
+
+        contentListWidget.add(LessonItem(
+          lesson: content as Lesson,
+          mini: this.mini,
+          course: content.course,
+          currentLesson: lesson.id == currentContentId,
+        ));
+      } else if (content is Guide) {
         height += mini ? 81 : 70;
-        contentListWidget.add(GuideItem(guide: content as Guide, mini: this.mini,));
+        contentListWidget.add(GuideItem(
+          guide: content as Guide,
+          mini: this.mini,
+        ));
       }
     });
 
     return [height, contentListWidget];
   }
-
-
 }

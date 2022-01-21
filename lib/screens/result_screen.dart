@@ -4,22 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class ResultScreen extends StatefulWidget{
-
+class ResultScreen extends StatefulWidget {
   Quiz quiz;
   int corrects;
   String courseId;
 
-  ResultScreen({required this.quiz, required this.corrects, required this.courseId});
+  ResultScreen(
+      {required this.quiz, required this.corrects, required this.courseId});
 
   @override
   State<StatefulWidget> createState() {
-      return ResultScreenState();
+    return ResultScreenState();
   }
-
 }
 
-class ResultScreenState extends State<ResultScreen>{
+class ResultScreenState extends State<ResultScreen> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late Future<int> _courseProgress;
   late Future<int> _quizProgress;
@@ -51,7 +50,8 @@ class ResultScreenState extends State<ResultScreen>{
     final int courseProgress = (prefs.getInt(widget.courseId) ?? 0) + 1;
 
     setState(() {
-      _courseProgress = prefs.setInt(widget.courseId, courseProgress).then((bool success) {
+      _courseProgress =
+          prefs.setInt(widget.courseId, courseProgress).then((bool success) {
         return courseProgress;
       });
     });
@@ -68,41 +68,40 @@ class ResultScreenState extends State<ResultScreen>{
       resultColor = App.myBlack;
 
     return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamed(context, '/second');
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: App.myBlack,
-          toolbarHeight: 0,
-        ),
-        body: FutureBuilder(
-          future: _courseProgress,
-          builder: (BuildContext context, AsyncSnapshot<int> snapshotCourse) {
-            if (snapshotCourse.connectionState == ConnectionState.done){
-              return FutureBuilder(
-                future: _quizProgress,
-                builder: (BuildContext context, AsyncSnapshot<int> snapshotQuiz){
-                  if(snapshotQuiz.connectionState == ConnectionState.done){
-                    print(widget.courseId);
-                    print("Course ${snapshotCourse.data}");
-                    print("Quiz ${snapshotQuiz.data}");
+        onWillPop: () async {
+          Navigator.pushNamed(context, '/second');
+          return false;
+        },
+        child: Scaffold(
+          body: SafeArea(
+            child: FutureBuilder(
+              future: _courseProgress,
+              builder:
+                  (BuildContext context, AsyncSnapshot<int> snapshotCourse) {
+                if (snapshotCourse.connectionState == ConnectionState.done) {
+                  return FutureBuilder(
+                    future: _quizProgress,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<int> snapshotQuiz) {
+                      if (snapshotQuiz.connectionState ==
+                          ConnectionState.done) {
+                        print(widget.courseId);
+                        print("Course ${snapshotCourse.data}");
+                        print("Quiz ${snapshotQuiz.data}");
 
-                    if (snapshotQuiz.data == 0){
-                      if (widget.corrects == widget.quiz.questions.length){
-                        _updateCourseStatus();
-                        _updateQuizStatus();
+                        if (snapshotQuiz.data == 0) {
+                          if (widget.corrects == widget.quiz.questions.length) {
+                            _updateCourseStatus();
+                            _updateQuizStatus();
+                          }
+                        }
 
-                      }
-                    }
-
-                    return Container(
-                      width: screenWidth,
-                      height: screenHeight,
-                      color: Colors.white,
-                      child: Center(
-                          child: Column(
+                        return Container(
+                          width: screenWidth,
+                          height: screenHeight,
+                          color: Colors.white,
+                          child: Center(
+                              child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
@@ -110,10 +109,9 @@ class ResultScreenState extends State<ResultScreen>{
                                 height: 100,
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: AssetImage('assets/logo_black.png'),
-                                        fit: BoxFit.cover
-                                    )
-                                ),
+                                        image:
+                                            AssetImage('assets/logo_black.png'),
+                                        fit: BoxFit.cover)),
                                 margin: EdgeInsets.symmetric(vertical: 10),
                               ),
                               Container(
@@ -122,8 +120,7 @@ class ResultScreenState extends State<ResultScreen>{
                                   style: TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.w600,
-                                      color: Color(0xFF333333)
-                                  ),
+                                      color: Color(0xFF333333)),
                                 ),
                                 margin: EdgeInsets.only(bottom: 40),
                               ),
@@ -132,15 +129,17 @@ class ResultScreenState extends State<ResultScreen>{
                                   radius: 200.0,
                                   lineWidth: 20.0,
                                   animation: true,
-                                  percent: widget.corrects / widget.quiz.questions.length,
+                                  percent: widget.corrects /
+                                      widget.quiz.questions.length,
                                   center: Container(
                                       width: 135,
                                       height: 135,
                                       padding: EdgeInsets.all(20),
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(250)),
-                                          border: Border.all(color: resultColor)
-                                      ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(250)),
+                                          border:
+                                              Border.all(color: resultColor)),
                                       child: Center(
                                         child: Text(
                                           "${(100 * widget.corrects / widget.quiz.questions.length).round()}%",
@@ -149,13 +148,13 @@ class ResultScreenState extends State<ResultScreen>{
                                               fontWeight: FontWeight.w600,
                                               color: Colors.black),
                                         ),
-                                      )
-                                  ),
+                                      )),
                                   circularStrokeCap: CircularStrokeCap.round,
                                   progressColor: resultColor,
                                 ),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(250)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(250)),
                                   border: Border.all(color: resultColor),
                                 ),
                                 padding: EdgeInsets.all(15),
@@ -183,8 +182,8 @@ class ResultScreenState extends State<ResultScreen>{
                                           child: Container(
                                             decoration: BoxDecoration(
                                                 color: App.gold,
-                                                borderRadius: BorderRadius.all(Radius.circular(70))
-                                            ),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(70))),
                                             width: screenWidth * 0.75,
                                             height: 70,
                                             child: Center(
@@ -193,42 +192,32 @@ class ResultScreenState extends State<ResultScreen>{
                                                 style: TextStyle(
                                                     fontSize: 20.0,
                                                     fontWeight: FontWeight.w600,
-                                                    color: Colors.white
-                                                ),
+                                                    color: Colors.white),
                                               ),
                                             ),
                                           ),
-                                          onTap: (){
+                                          onTap: () {
                                             Navigator.pushNamed(context, '/');
                                           },
                                         ),
-                                        margin: EdgeInsets.only(
-                                            top: 40
-                                        ),
+                                        margin: EdgeInsets.only(top: 40),
                                       )
                                     ],
-
-                                  )
-                              )
-
+                                  ))
                             ],
-                          )
-
-                      ),
-                    );
-                  }else{
-                    return Container();
-                  }
-                },
-              );
-            }else {
-              return Container();
-            }
-          },
-        ),
-      )
-    );
-
+                          )),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ),
+        ));
   }
-
 }

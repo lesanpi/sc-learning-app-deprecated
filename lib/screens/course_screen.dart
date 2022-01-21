@@ -21,11 +21,7 @@ class CourseScreen extends StatelessWidget {
 
   Widget courseScreen(BuildContext context) {
     return Scaffold(
-      body: courseScreenUI(context),
-      appBar: AppBar(
-        backgroundColor: App.myBlack,
-        toolbarHeight: 0,
-      ),
+      body: SafeArea(child: courseScreenUI(context)),
     );
   }
 
@@ -37,17 +33,14 @@ class CourseScreen extends StatelessWidget {
       children: [
         Container(
           height: 80,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
             color: Colors.white,
             //App.primaryColor,
             borderRadius: BorderRadius.only(
-              //bottomLeft: Radius.circular(30),
-              //bottomRight: Radius.circular(30)
-            ),
+                //bottomLeft: Radius.circular(30),
+                //bottomRight: Radius.circular(30)
+                ),
             boxShadow: [
               BoxShadow(
                 color: Color.fromRGBO(0, 0, 0, 0.2),
@@ -56,14 +49,14 @@ class CourseScreen extends StatelessWidget {
               )
             ],
           ),
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               InkWell(
                   child: Container(
-                    child: Text(
+                    child: const Text(
                       "👈",
                       style: TextStyle(
                         fontSize: 25,
@@ -87,7 +80,7 @@ class CourseScreen extends StatelessWidget {
                   }),
               Text(
                 course.title, //"Aprende sobre matematicas",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 21,
                   color: App.myBlack,
                   //Colors.white,
@@ -99,7 +92,7 @@ class CourseScreen extends StatelessWidget {
               Container(
                 width: 45,
                 height: 45,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage('assets/logo_black.png'),
                         fit: BoxFit.cover)),
@@ -117,7 +110,7 @@ class CourseScreen extends StatelessWidget {
                 child: Center(
                   child: Text(
                     course.emoji,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 80,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -125,14 +118,14 @@ class CourseScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                margin: EdgeInsets.symmetric(vertical: 20),
+                margin: const EdgeInsets.symmetric(vertical: 20),
               ),
               Container(
-                padding:
-                    EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 0),
+                padding: const EdgeInsets.only(
+                    left: 30, right: 30, top: 10, bottom: 0),
                 child: Text(
                   course.description,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black87,
                     fontSize: 16,
                   ),

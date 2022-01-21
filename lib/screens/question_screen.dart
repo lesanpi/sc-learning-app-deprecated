@@ -7,8 +7,7 @@ import 'package:e_learning_sc/widgets/quiz_medal.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class QuestionScreen extends StatefulWidget{
-
+class QuestionScreen extends StatefulWidget {
   Quiz quiz;
   int questionNum;
   int corrects;
@@ -19,10 +18,9 @@ class QuestionScreen extends StatefulWidget{
   State<StatefulWidget> createState() {
     return QuestionScreenState();
   }
-
 }
 
-class QuestionScreenState extends State<QuestionScreen>{
+class QuestionScreenState extends State<QuestionScreen> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late Future<int> _quizStatus;
 
@@ -46,7 +44,6 @@ class QuestionScreenState extends State<QuestionScreen>{
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -56,13 +53,11 @@ class QuestionScreenState extends State<QuestionScreen>{
 
     return WillPopScope(
         child: Scaffold(
-      body: SafeArea(
-          child: Container(
+          body: SafeArea(
+              child: Container(
             width: screenWidth,
             height: screenHeight,
-            padding: EdgeInsets.symmetric(
-                horizontal: 30
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -73,37 +68,33 @@ class QuestionScreenState extends State<QuestionScreen>{
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage('assets/logo_black.png'),
-                          fit: BoxFit.cover
-                      )
-                  ),
+                          fit: BoxFit.cover)),
                   margin: EdgeInsets.symmetric(vertical: 10),
                 ),
                 Container(
                   width: screenWidth,
-                  margin: EdgeInsets.symmetric(
-                      vertical: 20
-                  ),
-                  child: Row(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(
-                                right: 10
-                            ),
-                            child: QuizMedal(size: 60, background_color: App.myGrey, emoji: "❔", emojiSize: 25,)
+                  margin: EdgeInsets.symmetric(vertical: 20),
+                  child: Row(children: [
+                    Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: QuizMedal(
+                          size: 60,
+                          background_color: App.myGrey,
+                          emoji: "❔",
+                          emojiSize: 25,
+                        )),
+                    Flexible(
+                      child: Text(
+                        widget.quiz.title,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 25,
                         ),
-                        Flexible(
-                          child: Text(
-                            widget.quiz.title,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize:25,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        )
-                      ]
-                  ),
+                        textAlign: TextAlign.left,
+                      ),
+                    )
+                  ]),
                 ),
                 Container(
                   width: screenWidth,
@@ -112,42 +103,50 @@ class QuestionScreenState extends State<QuestionScreen>{
                     style: TextStyle(
                       fontSize: 23,
                       color: Colors.black,
-
                     ),
                     textAlign: TextAlign.justify,
                   ),
-                  margin: EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 10
-                  ),
+                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 ),
                 InkWell(
-                  child: QuestionOption(option: widget.quiz.questions[widget.questionNum].option_1, selected: option_selected == 1),
-                  onTap: (){
+                  child: QuestionOption(
+                      option:
+                          widget.quiz.questions[widget.questionNum].option_1,
+                      selected: option_selected == 1),
+                  onTap: () {
                     setState(() {
                       option_selected = 1;
                     });
                   },
                 ),
                 InkWell(
-                  child: QuestionOption(option: widget.quiz.questions[widget.questionNum].option_2, selected: option_selected == 2),
-                  onTap: (){
+                  child: QuestionOption(
+                      option:
+                          widget.quiz.questions[widget.questionNum].option_2,
+                      selected: option_selected == 2),
+                  onTap: () {
                     setState(() {
                       option_selected = 2;
                     });
                   },
                 ),
                 InkWell(
-                  child: QuestionOption(option: widget.quiz.questions[widget.questionNum].option_3, selected: option_selected == 3),
-                  onTap: (){
+                  child: QuestionOption(
+                      option:
+                          widget.quiz.questions[widget.questionNum].option_3,
+                      selected: option_selected == 3),
+                  onTap: () {
                     setState(() {
                       option_selected = 3;
                     });
                   },
                 ),
                 InkWell(
-                  child: QuestionOption(option: widget.quiz.questions[widget.questionNum].option_4, selected: option_selected == 4),
-                  onTap: (){
+                  child: QuestionOption(
+                      option:
+                          widget.quiz.questions[widget.questionNum].option_4,
+                      selected: option_selected == 4),
+                  onTap: () {
                     setState(() {
                       option_selected = 4;
                     });
@@ -160,13 +159,12 @@ class QuestionScreenState extends State<QuestionScreen>{
                   margin: EdgeInsets.only(top: 10),
                   child: InkWell(
                     child: Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 10
-                      ),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       height: 60,
                       decoration: BoxDecoration(
-                        color: option_selected == 0 ? Colors.black12 : App.myBlack,
+                        color:
+                            option_selected == 0 ? Colors.black12 : App.myBlack,
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         boxShadow: [
                           BoxShadow(
@@ -178,60 +176,60 @@ class QuestionScreenState extends State<QuestionScreen>{
                       ),
                       child: Center(
                         child: Text(
-                          widget.questionNum == widget.quiz.questions.length - 1 ? "TERMINAR" : "SIGUIENTE",
+                          widget.questionNum == widget.quiz.questions.length - 1
+                              ? "TERMINAR"
+                              : "SIGUIENTE",
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold
-                          ),
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
-                    onTap: (){
-                      if (option_selected != 0){
+                    onTap: () {
+                      if (option_selected != 0) {
+                        int _corrects = widget
+                                    .quiz
+                                    .questions[widget.questionNum]
+                                    .correctOption ==
+                                option_selected
+                            ? widget.corrects + 1
+                            : widget.corrects;
 
-                        int _corrects = widget.quiz.questions[widget.questionNum].correctOption == option_selected ? widget.corrects + 1: widget.corrects;
-
-                        if(widget.questionNum + 1 == widget.quiz.questions.length){
-
+                        if (widget.questionNum + 1 ==
+                            widget.quiz.questions.length) {
                           if (widget.corrects == widget.quiz.questions.length)
                             _updateQuizStatus();
 
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => ResultScreen(quiz: widget.quiz, corrects: _corrects, courseId: widget.quiz.id.substring(0, widget.quiz.id.length - 3))),
+                            MaterialPageRoute(
+                                builder: (context) => ResultScreen(
+                                    quiz: widget.quiz,
+                                    corrects: _corrects,
+                                    courseId: widget.quiz.id.substring(
+                                        0, widget.quiz.id.length - 3))),
                           );
-                        }
-                        else{
-
+                        } else {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => QuestionScreen(quiz: widget.quiz, questionNum: widget.questionNum + 1, corrects: _corrects)),
+                            MaterialPageRoute(
+                                builder: (context) => QuestionScreen(
+                                    quiz: widget.quiz,
+                                    questionNum: widget.questionNum + 1,
+                                    corrects: _corrects)),
                           );
                         }
-
                       }
                     },
                   ),
                 )
               ],
             ),
-          )
-      ),
-      appBar: AppBar(
-        backgroundColor: App.myBlack,
-        toolbarHeight: 0,
-      ),
-    ),
+          )),
+        ),
         onWillPop: () async {
-          setState(() {
-
-          });
+          setState(() {});
 
           return true;
-        }
-    );
+        });
   }
-
 }
-
-
