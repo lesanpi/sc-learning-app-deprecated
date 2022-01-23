@@ -123,20 +123,54 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return videoPlayerScreen(context);
+    return WillPopScope(
+      child: videoPlayerScreen(context),
+      onWillPop: () async {
+        if (_rotation == 1) {
+          await SystemChrome.restoreSystemUIOverlays();
+          setState(() {
+            _rotation = 0;
+          });
+
+          return false;
+        }
+        return true;
+      },
+    );
   }
 
   Widget videoPlayerScreen(BuildContext context) {
     return Scaffold(
       body: SafeArea(child: videoPlayerScreenUI(context)),
+      //  SafeArea(child: videoPlayerScreenUI(context)),
     );
+  }
+
+  void setToFullScreen() async {
+    //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      systemNavigationBarColor: Colors.black,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
+    ));
+  }
+
+  void exitFullScreen() async {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
+    ));
   }
 
   Widget videoPlayerScreenUI(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    bool fullScreen = false;
     return Column(
       children: [
         _rotation == 1
@@ -215,9 +249,11 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
                 )),
         Expanded(
           child: YoutubePlayerBuilder(
+            onEnterFullScreen: () {},
             onExitFullScreen: () {
               // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
               SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+              SystemChrome.restoreSystemUIOverlays();
             },
             player: YoutubePlayer(
               controller: _controller,
@@ -232,23 +268,13 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
                   onPressed: () async {
                     _controller.pause();
                     if (_rotation == 0) {
+                      setToFullScreen();
                       setState(() {
-                        SystemChrome.setEnabledSystemUIMode(
-                            SystemUiMode.immersive);
-                        SystemChrome.setSystemUIOverlayStyle(
-                            const SystemUiOverlayStyle(
-                          statusBarColor: Colors.white,
-                          systemNavigationBarColor: Colors.transparent,
-                          systemNavigationBarIconBrightness: Brightness.dark,
-                          statusBarBrightness: Brightness.light,
-                          statusBarIconBrightness: Brightness.dark,
-                        ));
                         _rotation = 1;
                       });
                     } else {
+                      exitFullScreen();
                       setState(() {
-                        SystemChrome.setEnabledSystemUIMode(
-                            SystemUiMode.edgeToEdge);
                         _rotation = 0;
                       });
                     }
@@ -285,8 +311,8 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
             ? SizedBox.shrink()
             : Container(
                 width: screenWidth,
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                margin: EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                margin: const EdgeInsets.only(top: 10),
                 child: Column(
                   children: [
                     Text(
