@@ -61,163 +61,174 @@ class ResultScreenState extends State<ResultScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final logo =
+        isDarkTheme ? 'assets/logo_white.png' : 'assets/logo_black.png';
+
     var resultColor;
     if (widget.corrects / widget.quiz.questions.length == 1)
-      resultColor = App.gold;
+      resultColor = isDarkTheme ? App.gold : Colors.blueAccent;
     else
-      resultColor = App.myBlack;
+      resultColor = isDarkTheme ? Colors.white : App.myBlack;
 
-    return WillPopScope(
+    return Scaffold(
+      backgroundColor: isDarkTheme ? Colors.grey.shade900 : Colors.white,
+      body: WillPopScope(
         onWillPop: () async {
           Navigator.pushNamed(context, '/second');
           return false;
         },
-        child: Scaffold(
-          body: SafeArea(
-            child: FutureBuilder(
-              future: _courseProgress,
-              builder:
-                  (BuildContext context, AsyncSnapshot<int> snapshotCourse) {
-                if (snapshotCourse.connectionState == ConnectionState.done) {
-                  return FutureBuilder(
-                    future: _quizProgress,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<int> snapshotQuiz) {
-                      if (snapshotQuiz.connectionState ==
-                          ConnectionState.done) {
-                        print(widget.courseId);
-                        print("Course ${snapshotCourse.data}");
-                        print("Quiz ${snapshotQuiz.data}");
+        child: SafeArea(
+          child: FutureBuilder(
+            future: _courseProgress,
+            builder: (BuildContext context, AsyncSnapshot<int> snapshotCourse) {
+              if (snapshotCourse.connectionState == ConnectionState.done) {
+                return FutureBuilder(
+                  future: _quizProgress,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<int> snapshotQuiz) {
+                    if (snapshotQuiz.connectionState == ConnectionState.done) {
+                      print(widget.courseId);
+                      print("Course ${snapshotCourse.data}");
+                      print("Quiz ${snapshotQuiz.data}");
 
-                        if (snapshotQuiz.data == 0) {
-                          if (widget.corrects == widget.quiz.questions.length) {
-                            _updateCourseStatus();
-                            _updateQuizStatus();
-                          }
+                      if (snapshotQuiz.data == 0) {
+                        if (widget.corrects == widget.quiz.questions.length) {
+                          _updateCourseStatus();
+                          _updateQuizStatus();
                         }
+                      }
 
-                        return Container(
-                          width: screenWidth,
-                          height: screenHeight,
-                          color: Colors.white,
-                          child: Center(
-                              child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image:
-                                            AssetImage('assets/logo_black.png'),
-                                        fit: BoxFit.cover)),
-                                margin: EdgeInsets.symmetric(vertical: 10),
-                              ),
-                              Container(
-                                child: Text(
-                                  "Resultados del Quiz",
-                                  style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF333333)),
+                      return Container(
+                        width: screenWidth,
+                        height: screenHeight,
+                        // color: Colors.white,
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(logo),
+                                      fit: BoxFit.cover)),
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                            ),
+                            Container(
+                              child: Text(
+                                "Resultados del Quiz",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.w600,
+                                  // color: Color(0xFF333333),
                                 ),
-                                margin: EdgeInsets.only(bottom: 40),
                               ),
-                              Container(
-                                child: CircularPercentIndicator(
-                                  radius: 200.0,
-                                  lineWidth: 20.0,
-                                  animation: true,
-                                  percent: widget.corrects /
-                                      widget.quiz.questions.length,
-                                  center: Container(
-                                      width: 135,
-                                      height: 135,
-                                      padding: EdgeInsets.all(20),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(250)),
-                                          border:
-                                              Border.all(color: resultColor)),
-                                      child: Center(
-                                        child: Text(
-                                          "${(100 * widget.corrects / widget.quiz.questions.length).round()}%",
-                                          style: TextStyle(
-                                              fontSize: 30.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black),
+                              margin: EdgeInsets.only(bottom: 40),
+                            ),
+                            Container(
+                              child: CircularPercentIndicator(
+                                radius: 200.0,
+                                lineWidth: 20.0,
+                                animation: true,
+                                percent: widget.corrects /
+                                    widget.quiz.questions.length,
+                                center: Container(
+                                    width: 135,
+                                    height: 135,
+                                    padding: EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(250)),
+                                        border: Border.all(color: resultColor)),
+                                    child: Center(
+                                      child: Text(
+                                        "${(100 * widget.corrects / widget.quiz.questions.length).round()}%",
+                                        style: TextStyle(
+                                          fontSize: 30.0,
+                                          fontWeight: FontWeight.w600,
+                                          // color: Colors.black,
                                         ),
-                                      )),
-                                  circularStrokeCap: CircularStrokeCap.round,
-                                  progressColor: resultColor,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(250)),
-                                  border: Border.all(color: resultColor),
-                                ),
-                                padding: EdgeInsets.all(15),
+                                      ),
+                                    )),
+                                circularStrokeCap: CircularStrokeCap.round,
+                                progressColor: resultColor,
                               ),
-                              Container(
-                                  padding: EdgeInsets.all(20),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        "¡Tu Puntuación!",
-                                        style: TextStyle(
-                                            fontSize: 25.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color(0xFF333333)),
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(250)),
+                                border: Border.all(color: resultColor),
+                              ),
+                              padding: EdgeInsets.all(15),
+                            ),
+                            Container(
+                                padding: EdgeInsets.all(20),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "¡Tu Puntuación!",
+                                      style: TextStyle(
+                                        fontSize: 25.0,
+                                        fontWeight: FontWeight.w600,
+                                        // color: Color(0xFF333333),
                                       ),
-                                      Text(
-                                        "${widget.quiz.title}",
-                                        style: TextStyle(
-                                            fontSize: 18.0,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black45),
+                                    ),
+                                    Text(
+                                      "${widget.quiz.title}",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w400,
+                                        // color: Colors.black45,
                                       ),
-                                      Container(
-                                        child: InkWell(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                color: App.gold,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(70))),
-                                            width: screenWidth * 0.75,
-                                            height: 70,
-                                            child: Center(
-                                              child: Text(
-                                                "Volver al Inicio",
-                                                style: TextStyle(
-                                                    fontSize: 20.0,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.white),
-                                              ),
+                                    ),
+                                    Container(
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: resultColor,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(70))),
+                                          width: screenWidth * 0.75,
+                                          height: 70,
+                                          child: Center(
+                                            child: Text(
+                                              "Volver al Inicio",
+                                              style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: isDarkTheme
+                                                      ? Colors.black
+                                                      : Colors.white
+                                                  // color: Colors.white,R
+                                                  ),
                                             ),
                                           ),
-                                          onTap: () {
-                                            Navigator.pushNamed(context, '/');
-                                          },
                                         ),
-                                        margin: EdgeInsets.only(top: 40),
-                                      )
-                                    ],
-                                  ))
-                            ],
-                          )),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    },
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            ),
+                                        onTap: () {
+                                          Navigator.pushNamed(context, '/');
+                                        },
+                                      ),
+                                      margin: EdgeInsets.only(top: 40),
+                                    )
+                                  ],
+                                ))
+                          ],
+                        )),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                );
+              } else {
+                return Container();
+              }
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

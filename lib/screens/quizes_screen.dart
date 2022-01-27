@@ -14,6 +14,10 @@ class QuizesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final logo =
+        isDarkTheme ? 'assets/logo_white.png' : 'assets/logo_black.png';
 
     return Scaffold(
       body: SafeArea(
@@ -30,8 +34,8 @@ class QuizesScreen extends StatelessWidget {
             Container(
                 height: 80,
                 width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: isDarkTheme ? Colors.grey.shade900 : Colors.white,
                   //App.primaryColor,
                   borderRadius: BorderRadius.only(
                       //bottomLeft: Radius.circular(30),
@@ -81,7 +85,7 @@ class QuizesScreen extends StatelessWidget {
                         "Quizes", //"Aprende sobre matematicas",
                         style: TextStyle(
                           fontSize: 21,
-                          color: App.myBlack,
+                          // color: App.myBlack,
                           //Colors.white,
                           fontWeight: FontWeight.w900,
                           //fontFamily:
@@ -93,8 +97,7 @@ class QuizesScreen extends StatelessWidget {
                         height: 45,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage('assets/logo_black.png'),
-                                fit: BoxFit.cover)),
+                                image: AssetImage(logo), fit: BoxFit.cover)),
                       ),
                     ],
                   ),

@@ -17,17 +17,19 @@ launchURL(String url) async {
   }
 }
 
-class GuideItem extends StatelessWidget{
-
+class GuideItem extends StatelessWidget {
   double height = 70;
   double width = 100;
   Guide guide;
   bool mini;
 
-  GuideItem({required this.guide, this.width = 100, this.height = 70, this.mini=false});
+  GuideItem(
+      {required this.guide,
+      this.width = 100,
+      this.height = 70,
+      this.mini = false});
 
   void _requestDownload() async {
-
     var tempDir = await getTemporaryDirectory();
     String fullPath = tempDir.path + "/boo2.pdf'";
     print('full path ${fullPath}');
@@ -40,7 +42,6 @@ class GuideItem extends StatelessWidget{
       print((received / total * 100).toStringAsFixed(0) + "%");
     }
   }
-
 
   Future download2(Dio dio, String savePath) async {
     try {
@@ -65,13 +66,12 @@ class GuideItem extends StatelessWidget{
       print(e);
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-
+    double screenWidth = MediaQuery.of(context).size.width;
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
     this.width = screenWidth - 20;
 
     if (this.mini)
@@ -81,31 +81,30 @@ class GuideItem extends StatelessWidget{
         margin: EdgeInsets.only(
           top: 1,
         ),
-        padding: EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 5
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.1),
-                blurRadius: 1,
-                spreadRadius: 0.1,
-              )
-            ]
-
+          color: isDarkTheme ? Colors.grey.shade900 : Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.1),
+              blurRadius: 1,
+              spreadRadius: 0.1,
+            )
+          ],
         ),
         child: Row(
           children: [
             InkWell(
-              child: Text("📖", style: TextStyle(fontSize: 25),),
+              child: Text(
+                "📖",
+                style: TextStyle(fontSize: 25),
+              ),
               /*Icon(
                 CupertinoIcons.arrow_uturn_right_circle_fill,
                 color: App.myBlack,//App.primaryColor,
                 size: 35,
               ),*/
-              onTap:  () async {
+              onTap: () async {
                 var tempDir = await getTemporaryDirectory();
                 String fullPath = tempDir.path + "/boo2.pdf'";
                 print('full path ${fullPath}');
@@ -114,31 +113,27 @@ class GuideItem extends StatelessWidget{
               },
             ),
             Container(
-              child: Text(guide.title, style: TextStyle(
+              child: Text(
+                guide.title,
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 15,
-                  color: Color(0xFF333333),//Colors.black87,
-              ),),
-              margin: EdgeInsets.symmetric(
-                  horizontal: 10
+                  // color: Color(0xFF333333), //Colors.black87,
+                ),
               ),
+              margin: EdgeInsets.symmetric(horizontal: 10),
             )
-
           ],
         ),
-
       );
 
     return InkWell(
       child: Container(
         width: width,
         height: height,
-        margin: EdgeInsets.only(
-            top: 10,
-            bottom: 10
-        ),
+        margin: EdgeInsets.only(top: 10, bottom: 10),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDarkTheme ? Colors.grey.shade900 : Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(30)),
             boxShadow: [
               BoxShadow(
@@ -146,8 +141,7 @@ class GuideItem extends StatelessWidget{
                 blurRadius: 1,
                 spreadRadius: 0.1,
               )
-            ]
-        ),
+            ]),
         //padding: EdgeInsets.all(5),
         child: Row(
           children: [
@@ -165,23 +159,23 @@ class GuideItem extends StatelessWidget{
               margin: EdgeInsets.symmetric(horizontal: 10),
             ),*/
             Container(
-              child: Text("📘", style: TextStyle(fontSize: 25),),
-              margin: //EdgeInsets.symmetric(horizontal: 10),
-              EdgeInsets.only(
-                left: 20
-              )
-            ),
+                child: Text(
+                  "📘",
+                  style: TextStyle(fontSize: 25),
+                ),
+                margin: //EdgeInsets.symmetric(horizontal: 10),
+                    EdgeInsets.only(left: 20)),
             Container(
               width: width - height - 20,
-              padding: EdgeInsets.only(
-                  left: 10,
-                  right: 10
-              ),
-              child: Text(guide.title, maxLines: 2, overflow: TextOverflow.ellipsis,
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Text(
+                guide.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 17,
-                  color: Color(0xFF333333),//Colors.black54
+                  // color: Color(0xFF333333), //Colors.black54
                 ),
               ),
             )
@@ -203,7 +197,6 @@ class GuideItem extends StatelessWidget{
       },
     );
   }
-
 }
 
 

@@ -50,9 +50,16 @@ class QuestionScreenState extends State<QuestionScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final logo =
+        isDarkTheme ? 'assets/logo_white.png' : 'assets/logo_black.png';
+    final colorSelected = isDarkTheme ? App.gold : Colors.blueAccent;
+    final colorUnselected = isDarkTheme ? Colors.white : Colors.black12;
 
     return WillPopScope(
         child: Scaffold(
+          backgroundColor: isDarkTheme ? Colors.grey.shade900 : Colors.white,
           body: SafeArea(
               child: Container(
             width: screenWidth,
@@ -67,8 +74,7 @@ class QuestionScreenState extends State<QuestionScreen> {
                   height: 100,
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage('assets/logo_black.png'),
-                          fit: BoxFit.cover)),
+                          image: AssetImage(logo), fit: BoxFit.cover)),
                   margin: EdgeInsets.symmetric(vertical: 10),
                 ),
                 Container(
@@ -87,7 +93,7 @@ class QuestionScreenState extends State<QuestionScreen> {
                       child: Text(
                         widget.quiz.title,
                         style: TextStyle(
-                          color: Colors.black,
+                          // color: Colors.black,
                           fontWeight: FontWeight.w600,
                           fontSize: 25,
                         ),
@@ -102,7 +108,7 @@ class QuestionScreenState extends State<QuestionScreen> {
                     widget.quiz.questions[widget.questionNum].question,
                     style: TextStyle(
                       fontSize: 23,
-                      color: Colors.black,
+                      // color: Colors.black,
                     ),
                     textAlign: TextAlign.justify,
                   ),
@@ -163,8 +169,9 @@ class QuestionScreenState extends State<QuestionScreen> {
                           EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       height: 60,
                       decoration: BoxDecoration(
-                        color:
-                            option_selected == 0 ? Colors.black12 : App.myBlack,
+                        color: option_selected == 0
+                            ? colorUnselected
+                            : colorSelected,
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         boxShadow: [
                           BoxShadow(
@@ -180,7 +187,8 @@ class QuestionScreenState extends State<QuestionScreen> {
                               ? "TERMINAR"
                               : "SIGUIENTE",
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                              color: isDarkTheme ? Colors.black : Colors.white,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),

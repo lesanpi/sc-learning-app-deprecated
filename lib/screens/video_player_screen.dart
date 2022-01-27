@@ -127,8 +127,8 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
       child: videoPlayerScreen(context),
       onWillPop: () async {
         if (_rotation == 1) {
-          await SystemChrome.restoreSystemUIOverlays();
           setState(() {
+            exitFullScreen();
             _rotation = 0;
           });
 
@@ -158,18 +158,27 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
   }
 
   void exitFullScreen() async {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.light,
-      statusBarIconBrightness: Brightness.dark,
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: isDarkTheme ? Colors.grey.shade900 : Colors.white,
+      systemNavigationBarColor:
+          isDarkTheme ? Colors.grey.shade900 : Colors.white,
+      systemNavigationBarIconBrightness:
+          isDarkTheme ? Brightness.light : Brightness.dark,
+      statusBarBrightness: isDarkTheme ? Brightness.dark : Brightness.light,
+      statusBarIconBrightness: isDarkTheme ? Brightness.light : Brightness.dark,
     ));
   }
 
   Widget videoPlayerScreenUI(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final logo =
+        isDarkTheme ? 'assets/logo_white.png' : 'assets/logo_black.png';
 
     return Column(
       children: [
@@ -178,8 +187,8 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
             : Container(
                 height: 80,
                 width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+                decoration: BoxDecoration(
+                  color: isDarkTheme ? Colors.grey.shade900 : Colors.white,
                   //App.primaryColor,
                   borderRadius: BorderRadius.only(
                       //bottomLeft: Radius.circular(30),
@@ -229,7 +238,7 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
                         widget.course.title, //"Aprende sobre matematicas",
                         style: const TextStyle(
                           fontSize: 21,
-                          color: App.myBlack,
+                          // color: App.myBlack,
                           //Colors.white,
                           fontWeight: FontWeight.w900,
                           //fontFamily:
@@ -239,26 +248,25 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
                       Container(
                         width: 45,
                         height: 45,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage('assets/logo_black.png'),
-                                fit: BoxFit.cover)),
+                                image: AssetImage(logo), fit: BoxFit.cover)),
                       ),
                     ],
                   ),
                 )),
         Expanded(
           child: YoutubePlayerBuilder(
-            onEnterFullScreen: () {},
-            onExitFullScreen: () {
-              // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
-              SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-              SystemChrome.restoreSystemUIOverlays();
-            },
             player: YoutubePlayer(
               controller: _controller,
               showVideoProgressIndicator: true,
-              progressIndicatorColor: Colors.blueAccent,
+              progressIndicatorColor:
+                  isDarkTheme ? App.gold : Colors.blueAccent,
+              progressColors: ProgressBarColors(
+                backgroundColor: Colors.black87,
+                playedColor: isDarkTheme ? App.gold : Colors.blueAccent,
+                // bufferedColor: isDarkTheme ? App.gold : Colors.blueAccent,
+              ),
               bottomActions: <Widget>[
                 IconButton(
                   icon: Icon(
@@ -268,13 +276,13 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
                   onPressed: () async {
                     _controller.pause();
                     if (_rotation == 0) {
-                      setToFullScreen();
                       setState(() {
+                        setToFullScreen();
                         _rotation = 1;
                       });
                     } else {
-                      exitFullScreen();
                       setState(() {
+                        exitFullScreen();
                         _rotation = 0;
                       });
                     }
@@ -318,7 +326,7 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
                     Text(
                       widget.lesson.title,
                       style: const TextStyle(
-                          color: Colors.black87,
+                          // color: Colors.black87,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
@@ -326,7 +334,7 @@ class _VideoPlayerScreen extends State<VideoPlayerScreen> {
                       child: Text(
                         widget.lesson.description,
                         style: const TextStyle(
-                            color: Colors.black87,
+                            // color: Colors.black87,
                             fontSize: 14,
                             fontWeight: FontWeight.w300),
                         maxLines: 3,

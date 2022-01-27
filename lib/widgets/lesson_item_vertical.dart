@@ -13,7 +13,8 @@ class LessonItemVertical extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
     double itemHeight = 210;
     if (this.mini) {
       return Container(
@@ -24,7 +25,11 @@ class LessonItemVertical extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         decoration: BoxDecoration(
-            color: currentLesson ? Colors.blue.withOpacity(0.5) : Colors.white,
+            color: currentLesson
+                ? Colors.blue.withOpacity(0.5)
+                : isDarkTheme
+                    ? Colors.grey.shade900
+                    : Colors.white,
             boxShadow: const [
               BoxShadow(
                 color: Color.fromRGBO(0, 0, 0, 0.1),
@@ -47,7 +52,9 @@ class LessonItemVertical extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: currentLesson
                         ? Colors.white
-                        : Color(0xFF333333), //Colors.black87,
+                        : isDarkTheme
+                            ? Colors.white
+                            : Color(0xFF333333), //Colors.black87,
                     fontSize: 15),
               ),
               margin: EdgeInsets.symmetric(horizontal: 10),
@@ -64,7 +71,7 @@ class LessonItemVertical extends StatelessWidget {
         top: 10,
       ),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDarkTheme ? Colors.grey.shade900 : Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(20)),
           boxShadow: [
             BoxShadow(
@@ -107,7 +114,7 @@ class LessonItemVertical extends StatelessWidget {
                   maxLines: 2,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF333333), //Colors.black54,
+                      // color: Color(0xFF333333), //Colors.black54,
                       fontSize: 17),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -116,7 +123,7 @@ class LessonItemVertical extends StatelessWidget {
                   maxLines: 4,
                   style: TextStyle(
                       fontWeight: FontWeight.w300,
-                      color: Colors.black54,
+                      // color: Colors.black54,
                       fontSize: 16),
                   overflow: TextOverflow.ellipsis,
                 )

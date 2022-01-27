@@ -20,6 +20,10 @@ class HomeScreen extends StatelessWidget {
   Widget homeScreen(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final logo =
+        isDarkTheme ? 'assets/logo_white.png' : 'assets/logo_black.png';
 
     return FutureBuilder(
       future: DefaultAssetBundle.of(context).loadString('assets/data.json'),
@@ -54,8 +58,10 @@ class HomeScreen extends StatelessWidget {
             Container(
                 height: 150, //225,
                 width: screenWidth,
-                decoration: const BoxDecoration(
-                  color: Colors.white, //App.primaryColor,
+                decoration: BoxDecoration(
+                  color: isDarkTheme
+                      ? Colors.grey.shade900
+                      : Colors.white, //App.primaryColor,
                   borderRadius: BorderRadius.only(
                       //bottomRight: Radius.circular(60), //90,
                       //bottomLeft: Radius.circular(60)
@@ -77,8 +83,7 @@ class HomeScreen extends StatelessWidget {
                       height: 80,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('assets/logo_black.png'),
-                              fit: BoxFit.cover)),
+                              image: AssetImage(logo), fit: BoxFit.cover)),
                       margin: EdgeInsets.symmetric(vertical: 5),
                     ),
                     Column(
@@ -99,7 +104,8 @@ class HomeScreen extends StatelessWidget {
                           "con ASOCIARTE 👌", //Aprende sobre matematicas",
                           style: TextStyle(
                             fontSize: 30, //35,
-                            color: Color(0xFF333333),
+                            color:
+                                isDarkTheme ? Colors.white : Color(0xFF333333),
                             //Colors.white,
                             fontWeight: FontWeight.w900,
                             //fontFamily:

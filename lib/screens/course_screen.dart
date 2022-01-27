@@ -28,14 +28,18 @@ class CourseScreen extends StatelessWidget {
   Widget courseScreenUI(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final logo =
+        isDarkTheme ? 'assets/logo_white.png' : 'assets/logo_black.png';
 
     return Column(
       children: [
         Container(
           height: 80,
           width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: isDarkTheme ? Colors.grey.shade900 : Colors.white,
             //App.primaryColor,
             borderRadius: BorderRadius.only(
                 //bottomLeft: Radius.circular(30),
@@ -60,7 +64,7 @@ class CourseScreen extends StatelessWidget {
                       "👈",
                       style: TextStyle(
                         fontSize: 25,
-                        color: Color(0xFF333333),
+                        // color: Color(0xFF333333),
                         //Colors.white,
                         fontWeight: FontWeight.bold,
                         //fontFamily:
@@ -80,9 +84,9 @@ class CourseScreen extends StatelessWidget {
                   }),
               Text(
                 course.title, //"Aprende sobre matematicas",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 21,
-                  color: App.myBlack,
+                  color: isDarkTheme ? Colors.white : Color(0xFF333333),
                   //Colors.white,
                   fontWeight: FontWeight.w900,
                   //fontFamily:
@@ -92,10 +96,9 @@ class CourseScreen extends StatelessWidget {
               Container(
                 width: 45,
                 height: 45,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage('assets/logo_black.png'),
-                        fit: BoxFit.cover)),
+                        image: AssetImage(logo), fit: BoxFit.cover)),
               ),
             ],
           ),
@@ -112,7 +115,6 @@ class CourseScreen extends StatelessWidget {
                     course.emoji,
                     style: const TextStyle(
                       fontSize: 80,
-                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       //fontFamily:
                     ),
@@ -125,8 +127,9 @@ class CourseScreen extends StatelessWidget {
                     left: 30, right: 30, top: 10, bottom: 0),
                 child: Text(
                   course.description,
-                  style: const TextStyle(
-                    color: Colors.black87,
+                  style: TextStyle(
+                    color:
+                        isDarkTheme ? Colors.grey.shade100 : Color(0xFF333333),
                     fontSize: 16,
                   ),
                   textAlign: TextAlign.justify,

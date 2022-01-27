@@ -29,7 +29,8 @@ class ContentList extends StatelessWidget {
 
     double screenHeight = MediaQuery.of(context).size.height;
     this.screenWidth = screenHeight;
-
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.only(
         left: this.mini ? 0 : 20,
@@ -43,7 +44,9 @@ class ContentList extends StatelessWidget {
                   child: Text(
                     "Lecciones",
                     style: TextStyle(
-                      color: Color(0xFF333333),
+                      color: isDarkTheme
+                          ? Colors.grey.shade100
+                          : Color(0xFF333333),
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -56,7 +59,7 @@ class ContentList extends StatelessWidget {
                         context: context,
                         removeTop: true,
                         child: ListView(
-                          children: listUi(contentList),
+                          children: listUi(contentList, isDarkTheme),
                         )),
                     width: screenWidth,
                     height: screenHeight - 400 - 40 - 30)
@@ -66,11 +69,11 @@ class ContentList extends StatelessWidget {
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: listUi(contentList)),
+              children: listUi(contentList, isDarkTheme)),
     );
   }
 
-  List<Widget> listUi(List<Content> contentList) {
+  List<Widget> listUi(List<Content> contentList, bool isDarkTheme) {
     List<Widget> listUi = [
       mini
           ? Container(
@@ -80,7 +83,7 @@ class ContentList extends StatelessWidget {
               child: Text(
                 "Lecciones",
                 style: TextStyle(
-                  color: Color(0xFF333333),
+                  color: isDarkTheme ? Colors.grey.shade100 : Color(0xFF333333),
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),

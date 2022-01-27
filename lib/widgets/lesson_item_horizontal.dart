@@ -11,14 +11,15 @@ class LessonItemHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
     double itemHeight = 210;
 
     if (this.mini) return Container();
 
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDarkTheme ? Colors.grey.shade900 : Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(20)),
           boxShadow: [
             BoxShadow(
@@ -49,7 +50,7 @@ class LessonItemHorizontal extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.black54,
+                      // color: Colors.black54,
                       fontSize: 16),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -58,7 +59,7 @@ class LessonItemHorizontal extends StatelessWidget {
                   maxLines: 2,
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
-                    color: Colors.black54,
+                    // color: Colors.black54,
                   ),
                   overflow: TextOverflow.ellipsis,
                 )

@@ -26,6 +26,8 @@ class GameMenuScreen extends StatelessWidget {
   Widget gameMenuScreenUI(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final isDarkTheme =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
     double headerHeight = 100; //120;
 
     return FutureBuilder(
@@ -39,8 +41,8 @@ class GameMenuScreen extends StatelessWidget {
               Container(
                   height: headerHeight,
                   width: MediaQuery.of(context).size.width,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
+                  decoration: BoxDecoration(
+                    color: isDarkTheme ? Colors.grey.shade900 : Colors.white,
                     //App.primaryColor,
                     borderRadius: BorderRadius.only(
                         //bottomLeft: Radius.circular(30),
@@ -65,7 +67,7 @@ class GameMenuScreen extends StatelessWidget {
                           "🧠",
                           style: TextStyle(
                             fontSize: 30,
-                            color: Color(0xFF333333),
+                            // color: Color(0xFF333333),
                             //Colors.white,
                             fontWeight: FontWeight.bold,
                             //fontFamily:
@@ -76,7 +78,10 @@ class GameMenuScreen extends StatelessWidget {
                           "¡Ponte a Prueba!", //"Aprende sobre matematicas",
                           style: TextStyle(
                             fontSize: 25,
-                            color: Color(0xFF333333),
+                            color: isDarkTheme
+                                ? Colors.grey.shade100
+                                : Color(0xFF333333),
+                            // color: Color(0xFF333333),
                             //Colors.white,
                             fontWeight: FontWeight.w900,
                             //fontFamily:
