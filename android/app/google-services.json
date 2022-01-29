@@ -1,39 +1,39 @@
 {
-  "project_info": {
-    "project_number": "635863640310",
-    "project_id": "asociarte-e-learning-app",
-    "storage_bucket": "asociarte-e-learning-app.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:635863640310:android:70afe6dc1939a6cf4724d7",
-        "android_client_info": {
-          "package_name": "com.example.e_learning_sc"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "635863640310-boj6u5s1n2p8mb1r1srlf9qkbjscl7sq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBg7l-qo9dPMft7yKB3W8euJTe2dsaO4ag"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "635863640310-boj6u5s1n2p8mb1r1srlf9qkbjscl7sq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
+	"project_info": {
+		"project_number": "635863640310",
+		"project_id": "asociarte-e-learning-app",
+		"storage_bucket": "asociarte-e-learning-app.appspot.com"
+	},
+	"client": [
+		{
+			"client_info": {
+				"mobilesdk_app_id": "1:635863640310:android:70afe6dc1939a6cf4724d7",
+				"android_client_info": {
+					"package_name": "com.lesanpi.e_learning_sc"
+				}
+			},
+			"oauth_client": [
+				{
+					"client_id": "635863640310-boj6u5s1n2p8mb1r1srlf9qkbjscl7sq.apps.googleusercontent.com",
+					"client_type": 3
+				}
+			],
+			"api_key": [
+				{
+					"current_key": "AIzaSyBg7l-qo9dPMft7yKB3W8euJTe2dsaO4ag"
+				}
+			],
+			"services": {
+				"appinvite_service": {
+					"other_platform_oauth_client": [
+						{
+							"client_id": "635863640310-boj6u5s1n2p8mb1r1srlf9qkbjscl7sq.apps.googleusercontent.com",
+							"client_type": 3
+						}
+					]
+				}
+			}
+		}
+	],
+	"configuration_version": "1"
 }
